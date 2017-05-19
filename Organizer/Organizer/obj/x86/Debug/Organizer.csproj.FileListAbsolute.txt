@@ -1,0 +1,7 @@
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\x86\Debug\Authentication.g.cs
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\x86\Debug\MainWindow.g.cs
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\x86\Debug\Registration.g.cs
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\x86\Debug\App.g.cs
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\x86\Debug\GeneratedInternalTypeHelper.g.cs
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\x86\Debug\Organizer_MarkupCompile.cache
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\x86\Debug\Organizer_MarkupCompile.lref
