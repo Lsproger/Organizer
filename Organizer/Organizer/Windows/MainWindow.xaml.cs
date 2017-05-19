@@ -48,6 +48,16 @@ namespace Organizer
             _notesList.Loaded += _notesList_Loaded;
             _lessonsBox.Loaded += _lessonsBox_Loaded;
             _lessons.LostFocus += _lessons_LostFocus;
+            _progressList.Loaded += _progressList_Loaded;
+        }
+
+        private void _progressList_Loaded(object sender, RoutedEventArgs e)
+        {
+            using (OrgContext oc = new OrgContext())
+            {
+                oc.Progresses.OrderBy(p => p.LessonName).Load();
+                _progressList.ItemsSource = oc.Progresses.Local;
+            }
         }
 
         private void _lessons_LostFocus(object sender, RoutedEventArgs e)
@@ -226,6 +236,18 @@ namespace Organizer
             using (FileStream fs = new FileStream(fname, FileMode.OpenOrCreate))
             {
                 formatter.Serialize(fs, _notes);
+            }
+        }
+
+        private void _addProgress_Click(object sender, RoutedEventArgs e)
+        {
+            Progress prog = new Progress { CompletedTasks = 0, IdStudent = stud.IdStudent, LessonName = _lessonsBox.SelectedValue.ToString(), NeededTasks = 1, TaskProgress = 0 };
+            using (OrgContext pr = new OrgContext())
+            {
+                pr.Progresses.Add(prog);
+                pr.SaveChanges();
+                pr.Progresses.OrderBy(p => p.LessonName).Load();
+                _progressList.ItemsSource = pr.Progresses.Local;
             }
         }
     }

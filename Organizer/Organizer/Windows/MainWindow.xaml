@@ -31,31 +31,41 @@
                 <DockPanel LastChildFill="True">
                     <StackPanel Margin="0,20" DockPanel.Dock="Top" Orientation="Horizontal" Height="50">
                         <ComboBox Name="_lessonsBox"/>
-                        <Custom:RibbonButton Width="50" Background="{StaticResource _addNoteImage}" FocusedBackground="{DynamicResource _addNoteImage}" MouseOverBackground="{DynamicResource _addNoteImage}"/>
+                        <Custom:RibbonButton Width="50" Click="_addProgress_Click" Background="{StaticResource _addNoteImage}" FocusedBackground="{DynamicResource _addNoteImage}" MouseOverBackground="{DynamicResource _addNoteImage}"/>
                     </StackPanel>
                     <ListBox Name="_progressList">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <DockPanel LastChildFill="True"  Margin="5,0" >
-                                    <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Label Content="Всего заданий"/>
-                                            <Custom:RibbonButton/>
-                                            <Custom:RibbonButton/>
-                                            <TextBox Text="{Binding NeededTasks}" />
+                                <Grid Width="700">
+                                    <DockPanel LastChildFill="True"  Margin="5,0" >
+                                        <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Label Width="100" Content="Всего заданий"/>
+                                                <TextBox Text="{Binding NeededTasks}" />
+                                                <StackPanel>
+                                                    <Custom:RibbonButton  Content="+" />
+                                                    <Custom:RibbonButton Width="20" Height="20" Content="-" Background="AliceBlue"/>
+                                                </StackPanel>
+
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Label Width="100" Content="Сдано заданий"/>
+                                                <TextBox Text="{Binding CompletedTasks}" />
+                                                <StackPanel Orientation="Vertical">
+                                                    <Custom:RibbonButton Width="15" Height="15" Content="+" />
+                                                    <Custom:RibbonButton Width="15" Height="15" Content="-"/>
+                                                </StackPanel>
+
+                                            </StackPanel>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Label Content="Готовых заданий"/>
-                                            <Custom:RibbonButton/>
-                                            <Custom:RibbonButton/>
-                                            <TextBox Text="{Binding CompletedTasks}" />
+                                        <StackPanel>
+                                            <Label Content="{Binding LessonName}" HorizontalAlignment="Center"/>
+                                            <ProgressBar Value="{Binding TaskProgress}" Height="30"/>
+                                            
+
                                         </StackPanel>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <Label Content="{Binding LessonName}" Height="20"/>
-                                        <ProgressBar Value="{Binding TaskProgress}" Height="30"/>
-                                    </StackPanel>
-                                </DockPanel>
+                                    </DockPanel>
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
