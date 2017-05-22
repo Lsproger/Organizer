@@ -11,9 +11,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Background" Value="WhiteSmoke"/>
+                            <Setter Property="IsSelected" Value="True"/>
                             <!-- <Setter Property="Foreground" Value="White"/>-->
                         </Trigger>
+                        
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

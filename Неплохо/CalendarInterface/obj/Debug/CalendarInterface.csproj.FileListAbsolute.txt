@@ -1,0 +1,20 @@
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\bin\Debug\CalendarInterface.dll
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\bin\Debug\CalendarInterface.pdb
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\obj\Debug\CalendarInterface.dll
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\obj\Debug\CalendarInterface.pdb
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\obj\Debug\ResolveAssemblyReference.cache
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\obj\Debug\CalendarInterface.dll
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\bin\Debug\CalendarInterface.dll
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\bin\Debug\CalendarInterface.pdb
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\obj\Debug\CalendarInterface.pdb
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\bin\Debug\CalendarInterface.dll
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\bin\Debug\CalendarInterface.pdb
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\obj\Debug\CalendarInterface.dll
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\obj\Debug\CalendarInterface.pdb
+C:\Users\Razok\Desktop\WPFCalendar-master\CalendarInterface\bin\Debug\CalendarInterface.dll
+C:\Users\Razok\Desktop\WPFCalendar-master\CalendarInterface\bin\Debug\CalendarInterface.pdb
+C:\Users\Razok\Desktop\WPFCalendar-master\CalendarInterface\obj\Debug\CalendarInterface.csprojResolveAssemblyReference.cache
+C:\Users\Razok\Desktop\WPFCalendar-master\CalendarInterface\obj\Debug\CalendarInterface.dll
+C:\Users\Razok\Desktop\WPFCalendar-master\CalendarInterface\obj\Debug\CalendarInterface.pdb

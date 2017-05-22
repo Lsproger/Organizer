@@ -1,0 +1,5 @@
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarBackend\bin\Debug\CalendarBackend.dll
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarBackend\bin\Debug\CalendarBackend.pdb
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarBackend\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarBackend\obj\Debug\CalendarBackend.dll
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarBackend\obj\Debug\CalendarBackend.pdb

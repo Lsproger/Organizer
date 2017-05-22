@@ -1,0 +1,19 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="Calendar.DayName"
+	x:Name="UserControl"
+	d:DesignWidth="64" d:DesignHeight="32">
+
+	<Grid x:Name="LayoutRoot">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Viewbox VerticalAlignment="Center">
+			<TextBlock x:Name="NameOfTheDay" TextWrapping="Wrap" SnapsToDevicePixels="True" Foreground="White" FontWeight="Bold" Text="Monday" FontSize="10.667" HorizontalAlignment="Center" Margin="8,0" />
+		</Viewbox>
+	</Grid>
+</UserControl>

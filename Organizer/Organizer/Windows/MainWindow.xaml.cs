@@ -94,7 +94,7 @@ namespace Organizer
         {
             db.Dispose();
             db = new OrgContext();
-            db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb==stud.Group.Group_numb).Load();
+            db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb==stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
             _messages.ItemsSource = db.Messages.Local;
         }
 
@@ -193,9 +193,12 @@ namespace Organizer
                 MessageDate = DateTime.Now
             };
             db.Messages.Add(msg);
-            db.Messages.Reverse();
             db.SaveChanges();
-            
+            db.Dispose();
+            db = new OrgContext();
+            db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb == stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
+            _messages.ItemsSource = db.Messages.Local;
+
         }
 
         private bool IsNotesExist()
@@ -248,6 +251,19 @@ namespace Organizer
                 pr.SaveChanges();
                 pr.Progresses.OrderBy(p => p.LessonName).Load();
                 _progressList.ItemsSource = pr.Progresses.Local;
+            }
+        }
+
+        private void _deleteMsg(object sender, RoutedEventArgs e)
+        {
+            
+            using (OrgContext oc = new OrgContext())
+            {
+                Message m = (_messages.SelectedItem as Message);
+                MessageBox.Show("Chekai:" + m.IdStudent + " " + m.MessageDate + " " + m.MessageText);
+                oc.Messages.Remove(oc.Messages.Find(m.MessId));
+                oc.SaveChanges();
+                _messages_Loaded(this, new RoutedEventArgs());
             }
         }
     }

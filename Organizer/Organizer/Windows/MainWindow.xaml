@@ -4,19 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Organizer"
-        xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" x:Name="MainWindow1" x:Class="Organizer.MainWindow"
-    xmlns:databinding="clr-namespace:Organizer"    
-    mc:Ignorable="d"
+        xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" 
+        x:Name="MainWindow1" 
+        x:Class="Organizer.MainWindow"
+        xmlns:databinding="clr-namespace:Organizer"    
+        mc:Ignorable="d"
         Title="MainWindow" Height="597" Width="934" MinWidth="556" MinHeight="450" Background="{x:Null}" Foreground="Black" BorderBrush="Black">
 
 
     <Window.Resources>
-
         <databinding:DayConverter x:Key="DayConverter"></databinding:DayConverter>
         <databinding:LessonConverter x:Key="LessonConverter"></databinding:LessonConverter>
         <ImageBrush x:Key="_addNoteImage" ImageSource="@..\..\..\Resources\addNotePic.png"/>
-
-
+        <ImageBrush x:Key="_minusImage" ImageSource="@..\..\..\Resources\minus.png"/>
+        <ImageBrush x:Key="_plusImage" ImageSource="@..\..\..\Resources\plus.png"/>
     </Window.Resources>
 
     <Grid Margin="0">
@@ -30,7 +31,7 @@
             <TabItem Header="ПРОГРЕСС" Height="30" Width="Auto" Margin="-3,0,0,0" Background="LightBlue" HorizontalAlignment="Stretch" BorderThickness="1,0,0,0" BorderBrush="{x:Null}">
                 <DockPanel LastChildFill="True">
                     <StackPanel Margin="0,20" DockPanel.Dock="Top" Orientation="Horizontal" Height="50">
-                        <ComboBox Name="_lessonsBox"/>
+                        <ComboBox Width="250" FontSize="24" Name="_lessonsBox"/>
                         <Custom:RibbonButton Width="50" Click="_addProgress_Click" Background="{StaticResource _addNoteImage}" FocusedBackground="{DynamicResource _addNoteImage}" MouseOverBackground="{DynamicResource _addNoteImage}"/>
                     </StackPanel>
                     <ListBox Name="_progressList">
@@ -41,28 +42,24 @@
                                         <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Всего заданий"/>
-                                                <TextBox Text="{Binding NeededTasks}" />
+                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding NeededTasks}" />
                                                 <StackPanel>
-                                                    <Custom:RibbonButton  Content="+" />
-                                                    <Custom:RibbonButton Width="20" Height="20" Content="-" Background="AliceBlue"/>
+                                                    <Custom:RibbonButton Width="15" Height="15" Label="+" Background="#FFA4A5A6"/>
+                                                    <Custom:RibbonButton Width="15" Height="15" Label="-" Background="#FFA4A5A6"/>
                                                 </StackPanel>
-
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Сдано заданий"/>
-                                                <TextBox Text="{Binding CompletedTasks}" />
+                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding CompletedTasks}" />
                                                 <StackPanel Orientation="Vertical">
-                                                    <Custom:RibbonButton Width="15" Height="15" Content="+" />
-                                                    <Custom:RibbonButton Width="15" Height="15" Content="-"/>
+                                                    <Custom:RibbonButton Width="15" Height="15" Background="#FFA4A5A6" Label="+"/>
+                                                    <Custom:RibbonButton Width="15" Height="15" Background="#FFA4A5A6" Label="-"/>
                                                 </StackPanel>
-
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel>
                                             <Label Content="{Binding LessonName}" HorizontalAlignment="Center"/>
                                             <ProgressBar Value="{Binding TaskProgress}" Height="30"/>
-                                            
-
                                         </StackPanel>
                                     </DockPanel>
                                 </Grid>
@@ -107,8 +104,8 @@
                         </ListBox>
 
                     </DockPanel>
-                    <Grid>
-
+                    <Grid Grid.Column="1">
+                     
                     </Grid>
                 </Grid>
             </TabItem>
@@ -181,10 +178,29 @@
                                  ItemContainerStyle="{StaticResource ListBoxNews}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Vertical"  Margin="5,0" >
+                                    <DockPanel  LastChildFill="True">
+                                        <TextBox DockPanel.Dock="Bottom" IsReadOnly="True" Margin="0,0,0,15" FontSize="18" FontFamily="ComicSans" TextWrapping="Wrap" Width="500" Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                            <TextBox.Template>
+                                                <ControlTemplate>
+                                                    <Border CornerRadius="10" Padding="5" BorderThickness="2" BorderBrush="#FF8F8F8F">
+                                                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </TextBox.Template>
+                                        </TextBox>
+                                        <DockPanel Margin="5,0">
+                                            <TextBlock DockPanel.Dock="Left" Background="Transparent" Width="Auto" Text="{Binding Path=Student.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            <Custom:RibbonButton DockPanel.Dock="Right" Click="_deleteMsg" Label="X"/>
+                                            <TextBlock Background="Transparent" Width="Auto" Margin="15,0" Text="{Binding Path=MessageDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                                        </DockPanel>
+
+                                    </DockPanel>
+                                    <!--<StackPanel Orientation="Vertical"  Margin="5,0">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Background="Transparent" Width="Auto" Text="{Binding Path=Student.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                             <TextBlock Background="Transparent" Width="Auto" Margin="15,0" Text="{Binding Path=MessageDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            <Label Content="X"/>
                                         </StackPanel>
                                         <TextBox IsReadOnly="True" Margin="0,5,0,15" FontSize="18" FontFamily="ComicSans" TextWrapping="Wrap" Width="500" Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                             <TextBox.Template>
@@ -195,7 +211,7 @@
                                                 </ControlTemplate>
                                             </TextBox.Template>
                                         </TextBox>
-                                    </StackPanel>
+                                    </StackPanel>-->
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

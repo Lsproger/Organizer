@@ -1,0 +1,34 @@
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\bin\Debug\Calendar.exe
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\bin\Debug\Calendar.pdb
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Window1.baml
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Window1.g.cs
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\App.g.cs
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Calendar_MarkupCompile.cache
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Calendar.g.resources
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Calendar.exe
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Calendar.pdb
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Day.baml
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Day.g.cs
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\Calendar_MarkupCompile.lref
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\DayName.baml
+C:\Users\Andrew Carretta\Documents\Expression\Expression Blend Projects\Calendar\Calendar\obj\Debug\DayName.g.cs
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Calendar.exe
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Calendar.pdb
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\bin\Debug\Calendar.exe
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\bin\Debug\Calendar.pdb
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Day.baml
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\DayName.baml
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Day.g.cs
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\DayName.g.cs
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Window1.g.cs
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\App.g.cs
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Calendar_MarkupCompile.cache
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Calendar_MarkupCompile.lref
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Window1.baml
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\obj\Debug\Calendar.g.resources
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\bin\Debug\CalendarInterface.dll
+C:\Documents and Settings\scoot\Desktop\Calendar\Calendar\bin\Debug\CalendarInterface.pdb

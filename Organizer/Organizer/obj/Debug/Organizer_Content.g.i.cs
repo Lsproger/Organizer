@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/userico.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/minus.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/plus.png")]
 
 

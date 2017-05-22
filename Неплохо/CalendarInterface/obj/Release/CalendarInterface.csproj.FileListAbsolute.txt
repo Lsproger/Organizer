@@ -1,0 +1,15 @@
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\bin\Release\CalendarInterface.dll
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\bin\Release\CalendarInterface.pdb
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\obj\Release\CalendarInterface.dll
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\CalendarInterface\CalendarInterface\obj\Release\CalendarInterface.pdb
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\bin\Release\CalendarInterface.dll
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\bin\Release\CalendarInterface.pdb
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\obj\Release\ResolveAssemblyReference.cache
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\obj\Release\CalendarInterface.dll
+C:\Softdev\Peronsal\Calendar\Calendar\CalendarInterface\CalendarInterface\obj\Release\CalendarInterface.pdb
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\obj\Release\CalendarInterface.dll
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\obj\Release\CalendarInterface.pdb
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\bin\Release\CalendarInterface.dll
+C:\Documents and Settings\scoot\Desktop\Calendar\CalendarInterface\bin\Release\CalendarInterface.pdb
