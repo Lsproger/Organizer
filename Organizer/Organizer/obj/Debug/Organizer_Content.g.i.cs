@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/minus.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/plus.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/sendmessage.png")]
 
 

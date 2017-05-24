@@ -103,6 +103,7 @@
     <Compile Include="Entites\Student.cs" />
     <Compile Include="Entites\TimeTable.cs" />
     <Compile Include="Entites\User.cs" />
+    <Compile Include="ProgressStateConverter.cs" />
     <Compile Include="ViewModels\NotesViewMode.cs" />
     <Compile Include="Windows\Authentication.xaml.cs">
       <DependentUpon>Authentication.xaml</DependentUpon>
@@ -184,6 +185,9 @@
   <ItemGroup>
     <Resource Include="Resources\minus.png" />
     <Resource Include="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sendMessage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,9 +15,11 @@
     <Window.Resources>
         <databinding:DayConverter x:Key="DayConverter"></databinding:DayConverter>
         <databinding:LessonConverter x:Key="LessonConverter"></databinding:LessonConverter>
+        <databinding:ProgressStateConverter x:Key="ProgressStateConverter"></databinding:ProgressStateConverter>
         <ImageBrush x:Key="_addNoteImage" ImageSource="@..\..\..\Resources\addNotePic.png"/>
         <ImageBrush x:Key="_minusImage" ImageSource="@..\..\..\Resources\minus.png"/>
         <ImageBrush x:Key="_plusImage" ImageSource="@..\..\..\Resources\plus.png"/>
+        <ImageBrush x:Key="_sendMessageImage" ImageSource="@..\..\..\Resources\sendMessage.png"/>
     </Window.Resources>
 
     <Grid Margin="0">
@@ -34,7 +36,7 @@
                         <ComboBox Width="250" FontSize="24" Name="_lessonsBox"/>
                         <Custom:RibbonButton Width="50" Click="_addProgress_Click" Background="{StaticResource _addNoteImage}" FocusedBackground="{DynamicResource _addNoteImage}" MouseOverBackground="{DynamicResource _addNoteImage}"/>
                     </StackPanel>
-                    <ListBox Name="_progressList">
+                    <ListBox Name="_progressList" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxNews}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Width="700">
@@ -42,24 +44,24 @@
                                         <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Всего заданий"/>
-                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding NeededTasks}" />
+                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding NeededTasks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 <StackPanel>
-                                                    <Custom:RibbonButton Width="15" Height="15" Label="+" Background="#FFA4A5A6"/>
-                                                    <Custom:RibbonButton Width="15" Height="15" Label="-" Background="#FFA4A5A6"/>
+                                                    <Custom:RibbonButton Width="15" Click="NeededTasksPlus_Click" Height="15" Label="+" Background="#FFA4A5A6"/>
+                                                    <Custom:RibbonButton Width="15" Click="NeededTasksMinus_Click" Height="15" Label="-" Background="#FFA4A5A6"/>
                                                 </StackPanel>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Сдано заданий"/>
-                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding CompletedTasks}" />
+                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding CompletedTasks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 <StackPanel Orientation="Vertical">
-                                                    <Custom:RibbonButton Width="15" Height="15" Background="#FFA4A5A6" Label="+"/>
-                                                    <Custom:RibbonButton Width="15" Height="15" Background="#FFA4A5A6" Label="-"/>
+                                                    <Custom:RibbonButton Width="15" Click="CompletedTasksPlus_Click" Height="15" Background="#FFA4A5A6" Label="+"/>
+                                                    <Custom:RibbonButton Width="15" Click="CompletedTasksMinus_Click" Height="15" Background="#FFA4A5A6" Label="-"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel>
                                             <Label Content="{Binding LessonName}" HorizontalAlignment="Center"/>
-                                            <ProgressBar Value="{Binding TaskProgress}" Height="30"/>
+                                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding TaskProgress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ProgressStateConverter}}" Height="30"/>
                                         </StackPanel>
                                     </DockPanel>
                                 </Grid>
@@ -105,7 +107,7 @@
 
                     </DockPanel>
                     <Grid Grid.Column="1">
-                     
+                        <Calendar Name="_calendar"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -170,9 +172,8 @@
                     <DockPanel LastChildFill="True">
                         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Height="100">
                             <TextBox FontSize="14" TextWrapping="Wrap" Name="_messageToDB" Margin="150,20,0,20" VerticalAlignment="Stretch" Width="550" Background="#FFEAF7F9">
-
                             </TextBox>
-                            <Custom:RibbonButton Width="50" Height="50" Click="RibbonButton_Click" FocusedBackground="BurlyWood" MouseOverBackground="BurlyWood" Background="#FFE2D8CB"/>
+                            <Custom:RibbonButton Width="50" Height="50" Click="SendMessage_Click" FocusedBackground="{DynamicResource _sendMessageImage}" MouseOverBackground="{DynamicResource _sendMessageImage}" Background="{DynamicResource _sendMessageImage}" PressedBackground="{DynamicResource _sendMessageImage}" PressedBorderBrush="#FFA4A4A4"/>
                         </StackPanel>
                         <ListBox Name="_messages" Margin="100,20,100,0" Background="Transparent" ScrollViewer.CanContentScroll="False"
                                  ItemContainerStyle="{StaticResource ListBoxNews}">

@@ -49,17 +49,21 @@ namespace Organizer
             _lessonsBox.Loaded += _lessonsBox_Loaded;
             _lessons.LostFocus += _lessons_LostFocus;
             _progressList.Loaded += _progressList_Loaded;
-        }
+        }        
 
-        private void _progressList_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            using (OrgContext oc = new OrgContext())
-            {
-                oc.Progresses.OrderBy(p => p.LessonName).Load();
-                _progressList.ItemsSource = oc.Progresses.Local;
-            }
+            _userName.Text = stud.Name;
+            _userID.Text = stud.IdStudent.ToString();
+            _otherInfo.Text = "Курс — " + stud.Group.Course + ", группа — " + stud.Group.Group_numb + "-" + stud.Group.Subgroup;
+            LoadTimeTableIfEmpty();
+            _week.Loaded += _week_Loaded;
+            _week.SelectionChanged += _week_SelectionChanged;
+           // _calendar.
         }
 
+
+        #region TimeTable
         private void _lessons_LostFocus(object sender, RoutedEventArgs e)
         {
             db.SaveChanges();
@@ -70,42 +74,10 @@ namespace Organizer
             List<string> progressSubjects = new List<string> { "Выберите предмет" };
             using (OrgContext db = new OrgContext())
             {
-                progressSubjects.AddRange(db.TimeTables.Where(p=>(p.Group.IdGroup==stud.IdGroup)&&(p.LessonName!="")).OrderBy(p => p.LessonName).Select(p => p.LessonName).Distinct().ToList());
+                progressSubjects.AddRange(db.TimeTables.Where(p => (p.Group.IdGroup == stud.IdGroup) && (p.LessonName != "")).OrderBy(p => p.LessonName).Select(p => p.LessonName).Distinct().ToList());
             }
             _lessonsBox.ItemsSource = progressSubjects;
             _lessonsBox.SelectedIndex = 0;
-        }
-
-        private void _notesList_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!IsNotesExist())
-            {
-                CreateNotes();
-                Notes = LoadNotes();
-            }
-            else
-            {
-                Notes = LoadNotes();
-            }
-            _notesList.ItemsSource = Notes.ToBindingList();
-        }
-
-        private void _messages_Loaded(object sender, RoutedEventArgs e)
-        {
-            db.Dispose();
-            db = new OrgContext();
-            db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb==stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
-            _messages.ItemsSource = db.Messages.Local;
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            _userName.Text = stud.Name;
-            _userID.Text = stud.IdStudent.ToString();
-            _otherInfo.Text = "Курс — " + stud.Group.Course + ", группа — " + stud.Group.Group_numb + "-" + stud.Group.Subgroup;
-            LoadTimeTableIfEmpty();
-            _week.Loaded += _week_Loaded;
-            _week.SelectionChanged += _week_SelectionChanged;
         }
 
         private void LoadTimeTableIfEmpty()
@@ -153,7 +125,7 @@ namespace Organizer
         {
             db.Dispose();
             db = new OrgContext();
-            db.TimeTables.Where(p => p.IdGroup == stud.IdGroup).Where(p=> p.Week == week).Load();
+            db.TimeTables.Where(p => p.IdGroup == stud.IdGroup).Where(p => p.Week == week).Load();
             _lessons.ItemsSource = db.TimeTables.Local.ToBindingList();
             DataContext = new TimetableViewModel(stud, week);
         }
@@ -167,7 +139,7 @@ namespace Organizer
             if (DateTime.Now.Month >= 9)
             {
                 diaposone = end - firstSept.DayOfYear + (int)firstSept.DayOfWeek;
-                if ((int)((diaposone+7) / 7) % 2 == 0)
+                if ((int)((diaposone + 7) / 7) % 2 == 0)
                 {
                     return "Первая";
                 }
@@ -183,22 +155,21 @@ namespace Organizer
                 else return "Вторая";
             }
         }
+        #endregion
 
-        private void RibbonButton_Click(object sender, RoutedEventArgs e)
+        #region Notes
+        private void _notesList_Loaded(object sender, RoutedEventArgs e)
         {
-            Message msg = new Message
+            if (!IsNotesExist())
             {
-                MessageText = _messageToDB.Text,
-                IdStudent = stud.IdStudent,
-                MessageDate = DateTime.Now
-            };
-            db.Messages.Add(msg);
-            db.SaveChanges();
-            db.Dispose();
-            db = new OrgContext();
-            db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb == stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
-            _messages.ItemsSource = db.Messages.Local;
-
+                CreateNotes();
+                Notes = LoadNotes();
+            }
+            else
+            {
+                Notes = LoadNotes();
+            }
+            _notesList.ItemsSource = Notes.ToBindingList();
         }
 
         private bool IsNotesExist()
@@ -241,6 +212,53 @@ namespace Organizer
                 formatter.Serialize(fs, _notes);
             }
         }
+        #endregion
+
+        #region Messages
+        private void _deleteMsg(object sender, RoutedEventArgs e)
+        {
+            
+            using (OrgContext oc = new OrgContext())
+            {
+                Message m = (_messages.SelectedItem as Message);
+
+                MessageBox.Show("Chekai:" + m.IdStudent + " " + m.MessageDate + " " + m.MessageText);
+                oc.Messages.Remove(oc.Messages.Find(m.MessId));
+                oc.SaveChanges();
+                _messages_Loaded(this, new RoutedEventArgs());
+            }
+        }
+
+        private void _messages_Loaded(object sender, RoutedEventArgs e)
+        {
+            db.Dispose();
+            db = new OrgContext();
+            db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb == stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
+            _messages.ItemsSource = db.Messages.Local;
+        }
+
+        private void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (_messageToDB.Text != "")
+            {
+                Message msg = new Message
+                {
+                    MessageText = _messageToDB.Text,
+                    IdStudent = stud.IdStudent,
+                    MessageDate = DateTime.Now
+                };
+                db.Messages.Add(msg);
+                db.SaveChanges();
+                db.Dispose();
+                db = new OrgContext();
+                db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb == stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
+                _messages.ItemsSource = db.Messages.Local;
+            }
+
+        }
+        #endregion
+
+        #region Tasks
 
         private void _addProgress_Click(object sender, RoutedEventArgs e)
         {
@@ -249,23 +267,75 @@ namespace Organizer
             {
                 pr.Progresses.Add(prog);
                 pr.SaveChanges();
-                pr.Progresses.OrderBy(p => p.LessonName).Load();
+                pr.Progresses.Where(p=>p.IdStudent == stud.IdStudent).OrderBy(p => p.LessonName).Load();
                 _progressList.ItemsSource = pr.Progresses.Local;
             }
         }
 
-        private void _deleteMsg(object sender, RoutedEventArgs e)
+        private void _progressList_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            using (OrgContext oc = new OrgContext())
+            UpdateTasks();
+        }
+
+        private void NeededTasksPlus_Click(object sender, RoutedEventArgs e)
+        {
+            Progress pp = _progressList.SelectedItem as Progress;
+            db.Progresses.Find(pp.TaskId).NeededTasks += 1;
+            db.Progresses.Find(pp.TaskId).TaskProgress =
+                (double)db.Progresses.Find(pp.TaskId).CompletedTasks /
+                (double)db.Progresses.Find(pp.TaskId).NeededTasks * 100;
+            db.SaveChanges();
+            UpdateTasks();
+        }
+
+        private void NeededTasksMinus_Click(object sender, RoutedEventArgs e)
+        {
+            Progress pp = _progressList.SelectedItem as Progress;
+            if (
+                    pp.NeededTasks > 1 &&
+                    pp.NeededTasks > pp.CompletedTasks
+                )
             {
-                Message m = (_messages.SelectedItem as Message);
-                MessageBox.Show("Chekai:" + m.IdStudent + " " + m.MessageDate + " " + m.MessageText);
-                oc.Messages.Remove(oc.Messages.Find(m.MessId));
-                oc.SaveChanges();
-                _messages_Loaded(this, new RoutedEventArgs());
+                db.Progresses.Find(pp.TaskId).NeededTasks -= 1;
+                db.Progresses.Find(pp.TaskId).TaskProgress = (double)db.Progresses.Find(pp.TaskId).CompletedTasks / (double)db.Progresses.Find(pp.TaskId).NeededTasks * 100;
+                db.SaveChanges();
+                UpdateTasks();
             }
         }
+
+        private void CompletedTasksPlus_Click(object sender, RoutedEventArgs e)
+        {
+            Progress pp = _progressList.SelectedItem as Progress;
+            if (pp.CompletedTasks < pp.NeededTasks)
+            {
+                db.Progresses.Find(pp.TaskId).CompletedTasks += 1;
+                db.Progresses.Find(pp.TaskId).TaskProgress = (double)db.Progresses.Find(pp.TaskId).CompletedTasks / (double)db.Progresses.Find(pp.TaskId).NeededTasks * 100;
+                db.SaveChanges();
+                UpdateTasks();
+            }
+        }
+
+        private void CompletedTasksMinus_Click(object sender, RoutedEventArgs e)
+        {
+            Progress pp = _progressList.SelectedItem as Progress;
+            if (pp.CompletedTasks > 0)
+            {
+                db.Progresses.Find(pp.TaskId).CompletedTasks -= 1;
+                db.Progresses.Find(pp.TaskId).TaskProgress = (double)db.Progresses.Find(pp.TaskId).CompletedTasks / (double)db.Progresses.Find(pp.TaskId).NeededTasks * 100;
+                db.SaveChanges();
+                UpdateTasks();
+            }
+        }
+
+        private void UpdateTasks()
+        {
+            using (OrgContext oc = new OrgContext())
+            {
+                oc.Progresses.Where(p => p.IdStudent == stud.IdStudent).OrderBy(p => p.LessonName).Load();
+                _progressList.ItemsSource = oc.Progresses.Local;
+            }
+        }
+        #endregion
     }
 
 
