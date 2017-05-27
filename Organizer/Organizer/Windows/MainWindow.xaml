@@ -50,7 +50,7 @@
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksPlus_Click" Height="15" Label="+" Background="#FFA4A5A6"/>
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksMinus_Click" Height="15" Label="-" Background="#FFA4A5A6"/>
                                                 </StackPanel>
-                                                <Custom:RibbonButton Width="30" FontSize="24" Label="X"/>
+                                                <Custom:RibbonButton Width="24" FontSize="24" Label="x"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Сдано заданий"/>
@@ -86,7 +86,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <DockPanel LastChildFill="True" Grid.Column="1">
-                        <TextBox Width="300" Height="400" TextWrapping="Wrap" LostFocus="_noteText_LostFocus" Name="_noteText" IsManipulationEnabled="True"/>
+                        <TextBox Width="300" Height="400" LostFocus="_noteText_LostFocus" TextWrapping="Wrap" Name="_noteText" IsManipulationEnabled="True" FontFamily="Segoe Print" FontSize="14" Background="#FFFBF690"/>
                     </DockPanel>
                     <Grid Grid.Column="0">
                         <StackPanel>

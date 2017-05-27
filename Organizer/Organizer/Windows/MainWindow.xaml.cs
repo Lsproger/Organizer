@@ -44,27 +44,27 @@ namespace Organizer
         public MainWindow(User u)
         {
             InitializeComponent();
-            Notes = db.Notes.ToList();
+            Notes = db.Notes.Where(n=>n.StudentId == u.IdStudent).ToList();
             stud = u.Student;
             this.Loaded += MainWindow_Loaded;
             _messages.Loaded += _messages_Loaded;
-            _lessonsBox.Loaded += _lessonsBox_Loaded;
             _lessons.LostFocus += _lessons_LostFocus;
-            _progressList.Loaded += _progressList_Loaded;
             ExistingNotesList.Loaded += ExistingNotesList_Loaded;
             ExistingNotesList.SelectionChanged += ExistingNotesList_SelectionChanged;
+            _lessonsBox.Loaded += _lessonsBox_Loaded;
+            _progressList.Loaded += _progressList_Loaded;
 
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
+            ConfigurateControlsIfNotStarosta();
             LoadTimeTableIfEmpty();
             _week.Loaded += _week_Loaded;
             _week.SelectionChanged += _week_SelectionChanged;
             _calendar.Loaded += _calendar_Loaded;
             _calendar.SelectedDatesChanged += _calendar_SelectedDatesChanged;
-            ConfigurateControlsIfNotStarosta();
+            
         }
 
         private void ConfigurateControlsIfNotStarosta()
@@ -169,7 +169,6 @@ namespace Organizer
         #endregion
 
         #region Notes
-
         private void ExistingNotesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -287,7 +286,7 @@ namespace Organizer
 
         private void LoadNotes()
         {
-            Notes = db.Notes.ToList();
+            Notes = db.Notes.Where(n=>n.StudentId==stud.IdStudent).ToList();
         }
 
         private void SaveNotes()
@@ -474,11 +473,6 @@ namespace Organizer
                 _progressList.ItemsSource = oc.Progresses.Local;
             }
         }
-        #endregion
-
-        private void _messageToDB_KeyDown(object sender, KeyEventArgs e)
-        {
-            //if (e.Key == Key.LeftCtrl  Key.Enter)
-        }
+        #endregion       
     }
 }

@@ -26,7 +26,7 @@
             </LinearGradientBrush>
         </Grid.Background>
         <TabControl Name="MainTabControl" Margin="20,10,30,10" Background="#FFDAFAFF" BorderBrush="{x:Null}" BorderThickness="0">
-            <TabItem Header="Заметки" Margin="-3,0,0,0" BorderThickness="1,0,0,0" BorderBrush="{x:Null}">
+            <TabItem Height="30" Header="Заметки" Margin="-3,0,0,0" BorderThickness="1,0,0,0" BorderBrush="{x:Null}">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
                         <GradientStop Color="LightBlue" Offset="1"/>
@@ -40,7 +40,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <DockPanel LastChildFill="True" Grid.Column="1">
-                        <TextBox Width="300" Height="400" LostFocus="_noteText_LostFocus" TextWrapping="Wrap" Name="_noteText" IsManipulationEnabled="True"/>
+                        <TextBox Width="300" Height="400" LostFocus="_noteText_LostFocus" TextWrapping="Wrap" Name="_noteText" IsManipulationEnabled="True" FontFamily="Segoe Print" FontSize="14" Background="#FFFBF690"/>
                     </DockPanel>
                     <Grid Grid.Column="0">
                         <StackPanel>

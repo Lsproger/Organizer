@@ -56,6 +56,7 @@ namespace Organizer
                     {
                         if (u.Login == usr.Login && u.Password == usr.Password)
                         {
+                            isgood = true;
                             if (_rememberUser.IsChecked == true)
                                 CreateRestoringFile(_authLogin.Text, _authPassword.Password);
                             else
@@ -64,23 +65,24 @@ namespace Organizer
                             {
                                 AdminWindow aw = new AdminWindow(usr);
                                 aw.Show();
+                                break;
                             }
                             else
                             {
                                 MainWindow wnd = new MainWindow(usr);
                                 wnd.Show();
+                                break;
                             }
-                            isgood = true;
                         }
                     }
+                    if (!isgood)
+                        MessageBox.Show("Логин или пароль введён неверно!");
+                    else this.Close();
                 }
                 catch (System.Data.DataException)
                 {
                     MessageBox.Show("Ошибка подключения к серверу!\r\nПроверьте своё подключение к интернету!");
                 }
-                if (!isgood)
-                    MessageBox.Show("Логин или пароль введён неверно!");
-                else this.Close();
             }
         }
 

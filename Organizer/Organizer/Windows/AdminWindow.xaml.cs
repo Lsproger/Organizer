@@ -26,7 +26,7 @@ namespace Organizer.Windows
         public AdminWindow(User u)
         {
             InitializeComponent();
-            Notes = db.Notes.ToList();
+            Notes = db.Notes.Where(n=>n.StudentId == u.IdStudent).ToList();
             stud = u.Student;
             this.Loaded += AdminWindow_Loaded;
             _messages.Loaded += _messages_Loaded;
@@ -60,16 +60,18 @@ namespace Organizer.Windows
 
         }
 
+
+
+        #region TimeTable
         private void _idGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateTT((_week.SelectedItem as ComboBoxItem).Content.ToString());
         }
+
         private void _week_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateTT(((sender as ComboBox).SelectedItem as ComboBoxItem).Content.ToString());
         }
-
-        #region TimeTable
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -280,7 +282,7 @@ namespace Organizer.Windows
         {
             DateTime date = Convert.ToDateTime(_calendar.SelectedDate);
             Note note = Notes.Find(n => n.NoteDate == date.ToShortDateString());
-            db.Notes.Remove(note);
+            db.Notes.Remove(db.Notes.Find(new object[] { note.NoteDate, note.StudentId}));
             ReloadNotes();
             ConfigurateControlsViaDate(date);
         }
@@ -293,7 +295,7 @@ namespace Organizer.Windows
 
         private void LoadNotes()
         {
-            Notes = db.Notes.ToList();
+            Notes = db.Notes.Where(n=>n.StudentId==stud.IdStudent).ToList();
         }
 
         private void SaveNotes()
