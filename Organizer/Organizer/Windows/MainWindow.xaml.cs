@@ -34,7 +34,7 @@ namespace Organizer
     {
         OrgContext db = new OrgContext();
         Student stud = new Student();
-        List<Note> Notes = new List<Note>();
+        List<Note> Notes = new List<Note>(); 
         
         public MainWindow()
         {
@@ -44,13 +44,17 @@ namespace Organizer
         public MainWindow(User u)
         {
             InitializeComponent();
+            Notes = db.Notes.ToList();
             stud = u.Student;
             this.Loaded += MainWindow_Loaded;
             _messages.Loaded += _messages_Loaded;
             _lessonsBox.Loaded += _lessonsBox_Loaded;
             _lessons.LostFocus += _lessons_LostFocus;
             _progressList.Loaded += _progressList_Loaded;
+            ExistingNotesList.Loaded += ExistingNotesList_Loaded;
+            ExistingNotesList.SelectionChanged += ExistingNotesList_SelectionChanged;
         }
+
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -154,6 +158,17 @@ namespace Organizer
         #endregion
 
         #region Notes
+
+        private void ExistingNotesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _calendar.SelectedDate = Convert.ToDateTime((ExistingNotesList.SelectedItem as Note).NoteDate);
+        }
+
+        private void ExistingNotesList_Loaded(object sender, RoutedEventArgs e)
+        {
+            ExistingNotesList.ItemsSource = Notes;
+        }
+
         private void _calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
             DateTime d = Convert.ToDateTime(_calendar.SelectedDate);
@@ -168,12 +183,14 @@ namespace Organizer
             {
                 AddNoteButton.IsEnabled = false;
                 _noteText.IsEnabled = true;
+                ExistingNotesList.SelectedItem = GetNoteOnDate(date);
             }
             else
             {
                 AddNoteButton.IsEnabled = true;
                 _noteText.IsEnabled = false;
                 _noteText.Text = "";
+                ExistingNotesList.SelectedItem = null;
             }
         }
 
@@ -202,16 +219,23 @@ namespace Organizer
         {
             DateTime d = Convert.ToDateTime(_calendar.SelectedDate);
             if (_noteText.Text != "")
-                Notes.Find(n => n.NoteDate == d.ToShortDateString()).NoteDescription = _noteText.Text;
-            else Notes.Remove(Notes.Find(n => n.NoteDate == d.ToShortDateString()));
+                db.Notes.Find(new object[] { d.ToShortDateString(), stud.IdStudent}).NoteDescription = _noteText.Text;
+            else
+            {
+                try
+                {
+                    DeleteNote();
+                }
+                catch (ArgumentException) { }
+            }
             ReloadNotes();
         }
 
         private void AddNoteButton_Click(object sender, RoutedEventArgs e)
         {
             DateTime date = Convert.ToDateTime(_calendar.SelectedDate);
-            Note n = new Note { NoteDate = date.ToShortDateString(), NoteDescription = "Новая заметочка!" };
-            Notes.Add(n);
+            Note n = new Note { NoteDate = date.ToShortDateString(), NoteDescription = "Новая заметочка!" , StudentId = stud.IdStudent};
+            db.Notes.Add(n);
             ReloadNotes();
             ShowNote(n);
             ConfigurateControlsViaDate(date);
@@ -225,9 +249,14 @@ namespace Organizer
 
         private void DeleteNoteButton_Click(object sender, RoutedEventArgs e)
         {
+            DeleteNote();
+        }
+
+        private void DeleteNote()
+        {
             DateTime date = Convert.ToDateTime(_calendar.SelectedDate);
             Note note = Notes.Find(n => n.NoteDate == date.ToShortDateString());
-            Notes.Remove(note);
+            db.Notes.Remove(note);
             ReloadNotes();
             ConfigurateControlsViaDate(date);
         }
@@ -240,29 +269,12 @@ namespace Organizer
 
         private void LoadNotes()
         {
-            string[] file_list = Directory.GetFiles("..\\..\\Resources\\", stud.IdStudent + ".xml");
-            if (file_list.Count() != 0)
-            {
-                XmlSerializer formatter = new XmlSerializer(typeof(List<Note>));
-                foreach (var file in file_list)
-                {
-                    using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
-                    {
-                        Notes = (List<Note>)formatter.Deserialize(fs);
-                    }
-                }
-            }
+            Notes = db.Notes.ToList();
         }
 
         private void SaveNotes()
         {
-            XmlSerializer formatter = new XmlSerializer(typeof(List<Note>));
-            // получаем поток, куда будем записывать сериализованный объект
-            string fname = "..\\..\\Resources\\" + stud.IdStudent +".xml";
-            using (FileStream fs = new FileStream(fname, FileMode.Create))
-            {
-                formatter.Serialize(fs, Notes);
-            }
+            db.SaveChanges();
         }
         #endregion
 
