@@ -8,48 +8,10 @@ using System.Runtime.CompilerServices;
 
 namespace Organizer.Entites
 {
-    public class Note : INotifyPropertyChanged
+    public class Note
     {
-        private string noteName, description;
-        private DateTime lastDate, startDate;
+        public string NoteDate { get; set; }
 
-        public string NoteName
-        {
-            get { return noteName; }
-            set
-            {
-                noteName = value;
-                OnPropertyChanged("NoteName");
-            }
-        }
-
-        public string Description
-        {
-            get { return description; }
-            set
-            {
-                description = value;
-                OnPropertyChanged("Description");
-            }
-        }
-
-        public DateTime LastDate
-        {
-            get { return lastDate; }
-            set
-            {
-                lastDate = value;
-                OnPropertyChanged("LastDate");
-            }
-        }
-
-        public DateTime StartDate { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
+        public string NoteDescription { get; set; }
     }
 }

@@ -14,11 +14,13 @@ namespace Organizer
             Students = new HashSet<Student>();
             TimeTables = new HashSet<TimeTable>();
         }
-
+        [RegularExpression(@"^[1-9]{1}[0]*$", ErrorMessage = "groupNumErr Группа: 1-10")]
         public int Group_numb { get; set; }
 
+        [RegularExpression(@"^[1-4]{1}$", ErrorMessage = "courseErr Курс: 1-4")]
         public int Course { get; set; }
 
+        [RegularExpression(@"^[1-2]{1}$", ErrorMessage = "subgrErr Подгруппа: 1 или 2")]
         public byte? Subgroup { get; set; }
 
         [Key]

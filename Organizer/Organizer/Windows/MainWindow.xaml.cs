@@ -22,6 +22,7 @@ using System.Data.Entity.Validation;
 using Organizer.Entites;
 using System.IO;
 using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace Organizer
 {
@@ -33,7 +34,8 @@ namespace Organizer
     {
         OrgContext db = new OrgContext();
         Student stud = new Student();
-        public ObservableCollection<Note> Notes;
+        List<Note> Notes = new List<Note>();
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -45,11 +47,10 @@ namespace Organizer
             stud = u.Student;
             this.Loaded += MainWindow_Loaded;
             _messages.Loaded += _messages_Loaded;
-            _notesList.Loaded += _notesList_Loaded;
             _lessonsBox.Loaded += _lessonsBox_Loaded;
             _lessons.LostFocus += _lessons_LostFocus;
             _progressList.Loaded += _progressList_Loaded;
-        }        
+        }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -59,25 +60,20 @@ namespace Organizer
             LoadTimeTableIfEmpty();
             _week.Loaded += _week_Loaded;
             _week.SelectionChanged += _week_SelectionChanged;
-           // _calendar.
+            _calendar.Loaded += _calendar_Loaded;
+            _calendar.SelectedDatesChanged += _calendar_SelectedDatesChanged;
         }
 
-
         #region TimeTable
-        private void _lessons_LostFocus(object sender, RoutedEventArgs e)
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             db.SaveChanges();
         }
 
-        private void _lessonsBox_Loaded(object sender, RoutedEventArgs e)
+        private void _lessons_LostFocus(object sender, RoutedEventArgs e)
         {
-            List<string> progressSubjects = new List<string> { "Выберите предмет" };
-            using (OrgContext db = new OrgContext())
-            {
-                progressSubjects.AddRange(db.TimeTables.Where(p => (p.Group.IdGroup == stud.IdGroup) && (p.LessonName != "")).OrderBy(p => p.LessonName).Select(p => p.LessonName).Distinct().ToList());
-            }
-            _lessonsBox.ItemsSource = progressSubjects;
-            _lessonsBox.SelectedIndex = 0;
+            db.SaveChanges();
         }
 
         private void LoadTimeTableIfEmpty()
@@ -158,58 +154,116 @@ namespace Organizer
         #endregion
 
         #region Notes
-        private void _notesList_Loaded(object sender, RoutedEventArgs e)
+        private void _calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!IsNotesExist())
-            {
-                CreateNotes();
-                Notes = LoadNotes();
-            }
-            else
-            {
-                Notes = LoadNotes();
-            }
-            _notesList.ItemsSource = Notes.ToBindingList();
+            DateTime d = Convert.ToDateTime(_calendar.SelectedDate);
+            ConfigurateControlsViaDate(d);
+            ShowNote(GetNoteOnDate(d));
+            Mouse.Capture(null);
         }
 
-        private bool IsNotesExist()
+        private void ConfigurateControlsViaDate(DateTime date)
         {
-            string[] file_list = Directory.GetFiles("..\\..\\Resources\\", "Notes.xaml");
-            if (file_list.Count() != 0) return true;
+            if (IsNoteOnDateExist(date))
+            {
+                AddNoteButton.IsEnabled = false;
+                _noteText.IsEnabled = true;
+            }
+
+            else
+            {
+                AddNoteButton.IsEnabled = true;
+                _noteText.IsEnabled = false;
+            }
+        }
+
+        private void ShowNote(Note n)
+        {
+            _noteText.Text = n.NoteDescription;
+        }
+
+        private Note GetNoteOnDate(DateTime d)
+        {
+            Note note= new Note { NoteDescription = "", NoteDate = ""};
+            if (Notes.Find(n => n.NoteDate == d.ToShortDateString()) != null)
+                note = Notes.Find(n => n.NoteDate == d.ToShortDateString());
+            return note;
+        }
+
+        private void _calendar_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadNotes();
+            DateTime d = Convert.ToDateTime(_calendar.SelectedDate);
+            ConfigurateControlsViaDate(d);
+            ShowNote(GetNoteOnDate(d));
+        }
+
+        private void _noteText_LostFocus(object sender, RoutedEventArgs e)
+        {
+            DateTime d = Convert.ToDateTime(_calendar.SelectedDate);
+            if (_noteText.Text != "")
+                Notes.Find(n => n.NoteDate == d.ToShortDateString()).NoteDescription = _noteText.Text;
+            else Notes.Remove(Notes.Find(n => n.NoteDate == d.ToShortDateString()));
+            ReloadNotes();
+        }
+
+        private void AddNoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime date = Convert.ToDateTime(_calendar.SelectedDate);
+            Note n = new Note { NoteDate = date.ToShortDateString(), NoteDescription = "Новая заметочка!" };
+            Notes.Add(n);
+            ReloadNotes();
+            ShowNote(n);
+            ConfigurateControlsViaDate(date);
+        }
+
+
+
+        private void ReloadNotes()
+        {
+            SaveNotes();
+            LoadNotes();
+        }
+
+        private void DeleteNoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime date = Convert.ToDateTime(_calendar.SelectedDate);
+            Note note = Notes.Find(n => n.NoteDate == date.ToShortDateString());
+            Notes.Remove(note);
+            ReloadNotes();
+            ConfigurateControlsViaDate(date);
+        }
+
+        private bool IsNoteOnDateExist(DateTime date)
+        {
+            if (Notes.Find(n => n.NoteDate == date.ToShortDateString()) != null) return true;
             else return false;
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void LoadNotes()
         {
-            db.SaveChanges();
-        }
-
-        private ObservableCollection<Note> LoadNotes()
-        {
-            string[] file_list = Directory.GetFiles("..\\..\\Resources\\", "Notes.xml");
-            XmlSerializer formatter = new XmlSerializer(typeof(ObservableCollection<Note>));
-            foreach (var file in file_list)
+            string[] file_list = Directory.GetFiles("..\\..\\Resources\\", stud.IdStudent + ".xml");
+            if (file_list.Count() != 0)
             {
-                using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
+                XmlSerializer formatter = new XmlSerializer(typeof(List<Note>));
+                foreach (var file in file_list)
                 {
-                    Notes = (ObservableCollection<Note>)formatter.Deserialize(fs);
-                    return Notes;
+                    using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
+                    {
+                        Notes = (List<Note>)formatter.Deserialize(fs);
+                    }
                 }
             }
-            return new ObservableCollection<Note>();
         }
 
-        private void CreateNotes()
+        private void SaveNotes()
         {
-            ObservableCollection<Note> _notes = new ObservableCollection<Note>();
-            Note nt = new Note { };
-            _notes.Add(nt);
-            XmlSerializer formatter = new XmlSerializer(typeof(ObservableCollection<Note>));
+            XmlSerializer formatter = new XmlSerializer(typeof(List<Note>));
             // получаем поток, куда будем записывать сериализованный объект
-            string fname = "..\\..\\Resources\\Notes.xml";
-            using (FileStream fs = new FileStream(fname, FileMode.OpenOrCreate))
+            string fname = "..\\..\\Resources\\" + stud.IdStudent +".xml";
+            using (FileStream fs = new FileStream(fname, FileMode.Create))
             {
-                formatter.Serialize(fs, _notes);
+                formatter.Serialize(fs, Notes);
             }
         }
         #endregion
@@ -217,7 +271,7 @@ namespace Organizer
         #region Messages
         private void _deleteMsg(object sender, RoutedEventArgs e)
         {
-            
+
             using (OrgContext oc = new OrgContext())
             {
                 Message m = (_messages.SelectedItem as Message);
@@ -260,16 +314,62 @@ namespace Organizer
 
         #region Tasks
 
+        private void _lessonsBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            List<string> progressSubjects = new List<string> { "Выберите предмет" };
+            using (OrgContext db = new OrgContext())
+            {
+                progressSubjects.AddRange(db.TimeTables.Where(p => (p.Group.IdGroup == stud.IdGroup) && (p.LessonName != "")).OrderBy(p => p.LessonName).Select(p => p.LessonName).Distinct().ToList());
+            }
+            _lessonsBox.ItemsSource = progressSubjects;
+            _lessonsBox.SelectedIndex = 0;
+            SetNoElementsNotification();
+        }
+
+        private void SetExistElementNotification()
+        {
+                NotificationMessgeToProgress.Content = "Вы уже отслеживаете этот предмет";
+        }
+
+        private void SetNoElementsNotification()
+        {
+            if(_lessonsBox.Items.Count == 1)
+                NotificationMessgeToProgress.Content = "Для выбора предмета должно быть расписание:(";
+        }
+
         private void _addProgress_Click(object sender, RoutedEventArgs e)
         {
-            Progress prog = new Progress { CompletedTasks = 0, IdStudent = stud.IdStudent, LessonName = _lessonsBox.SelectedValue.ToString(), NeededTasks = 1, TaskProgress = 0 };
-            using (OrgContext pr = new OrgContext())
+            ClearNotification();
+            if (_lessonsBox.SelectedIndex != 0 && !IsProgressInProgressList(_lessonsBox.SelectedItem as string))
             {
-                pr.Progresses.Add(prog);
-                pr.SaveChanges();
-                pr.Progresses.Where(p=>p.IdStudent == stud.IdStudent).OrderBy(p => p.LessonName).Load();
-                _progressList.ItemsSource = pr.Progresses.Local;
+                Progress prog = new Progress { CompletedTasks = 0, IdStudent = stud.IdStudent, LessonName = _lessonsBox.SelectedValue.ToString(), NeededTasks = 1, TaskProgress = 0 };
+                using (OrgContext pr = new OrgContext())
+                {
+                    pr.Progresses.Add(prog);
+                    pr.SaveChanges();
+                    pr.Progresses.Where(p => p.IdStudent == stud.IdStudent).OrderBy(p => p.LessonName).Load();
+                    _progressList.ItemsSource = pr.Progresses.Local;
+                }
             }
+        }
+
+        private void ClearNotification()
+        {
+            NotificationMessgeToProgress.Content = "";
+        }
+
+        private bool IsProgressInProgressList(string pr)
+        {
+            foreach (Progress p in _progressList.Items)
+            {
+                if (pr == p.LessonName)
+                {
+                    SetExistElementNotification();
+                    return true;
+                }
+            }
+            ClearNotification();
+            return false;
         }
 
         private void _progressList_Loaded(object sender, RoutedEventArgs e)
@@ -337,10 +437,4 @@ namespace Organizer
         }
         #endregion
     }
-
-
-
-
-
-
 }

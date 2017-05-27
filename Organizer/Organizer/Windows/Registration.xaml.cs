@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 namespace Organizer
 {
@@ -24,13 +25,12 @@ namespace Organizer
     {
         public Registration()
         {
-
             InitializeComponent();
-
         }
 
         private void RegistrationButton_Click(object sender, RoutedEventArgs e)
         {
+            ClearErrorLabels();
             try
             {
                 Student stud;
@@ -47,44 +47,22 @@ namespace Organizer
                     };
                     stud = new Student
                     {
-                        Name = _name.Text + " " + _surname.Text,
+                        Name = _name.Text,
                         IdGroup = Convert.ToInt32(_course.Text) * 1000 + Convert.ToInt32(_groupNum.Text) * 10 + Convert.ToInt32(_subGroup.Text),
                         IdStudent = Convert.ToInt32(_studID.Text)
                     };
-                    usr = new User
+                    using (MD5 md5h = MD5.Create())
                     {
-                        Login = _login.Text,
-                        Password = _password.Password,
-                        IdStudent = Convert.ToInt32(_studID.Text)
-                    };
+                        usr = new User
+                        {
+                            Login = _login.Text,
+                            Password = Authentication.GetMd5Hash(md5h, _password.Password),
+                            IdStudent = Convert.ToInt32(_studID.Text)
+                        };
+                    }
+                    if (!ValidateAll(usr, grup, stud)) throw new ValidationException("Ошибки в полях!");
                 }
-
                 else throw new ValidationException("Пароли не совпадают!");
-                var results = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-                var contextStd = new ValidationContext(stud);
-                var contextGrp = new ValidationContext(grup);
-                var contextUsr = new ValidationContext(usr);
-                results.Clear();
-
-                if (!Validator.TryValidateObject(grup, contextGrp, results, true))
-                {
-                    foreach (var res in results)
-                        throw new ValidationException(res.ErrorMessage);
-                }
-                results.Clear();
-                if (!Validator.TryValidateObject(stud, contextStd, results, true))
-                {
-                    foreach (var res in results)
-
-                        throw new ValidationException(res.ErrorMessage);
-                }
-
-                results.Clear();
-                if (!Validator.TryValidateObject(usr, contextUsr, results, true))
-                {
-                    foreach (var res in results)
-                        throw new ValidationException(res.ErrorMessage);
-                }
 
                 using (OrgContext db = new OrgContext())
                 {
@@ -111,6 +89,85 @@ namespace Organizer
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private bool ValidateStudent(Student s)
+        {
+            Regex r2 = new Regex(@"\w*Err");
+            var results = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            var cont = new ValidationContext(s);
+            if (!Validator.TryValidateObject(s, cont, results, true))
+            {
+                foreach (var r in results)
+                {
+                    Label l = (Label)this.FindName(r2.Match(r.ErrorMessage).Value);
+                    l.Content = r.ErrorMessage.Remove(0, r2.Match(r.ErrorMessage).Value.Count());
+                }
+                return false;
+            }
+            else return true;
+        }
+
+        private void ValidateGroup(Group g)
+        {
+            Regex r2 = new Regex(@"\w*Err");
+            var results = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            var cont = new ValidationContext(g);
+            if (!Validator.TryValidateObject(g, cont, results, true))
+            {
+                foreach (var r in results)
+                {
+                    Label l = (Label)this.FindName(r2.Match(r.ErrorMessage).Value);
+                    l.Content = r.ErrorMessage.Remove(0, r2.Match(r.ErrorMessage).Value.Count());
+                }
+            }
+        }
+
+        private void ValidateUser(User u)
+        {
+            Regex r2 = new Regex(@"\w*Err");
+            var results = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            var cont = new ValidationContext(u);
+            if (!Validator.TryValidateObject(u, cont, results, true))
+            {
+                foreach (var r in results)
+                {
+                    Label l = (Label)this.FindName(r2.Match(r.ErrorMessage).Value);
+                    l.Content = r.ErrorMessage.Remove(0, r2.Match(r.ErrorMessage).Value.Count());
+                }
+            }
+        }
+
+        private bool ValidateAll(User u, Group g, Student s)
+        {
+            ValidateUser(u);
+            ValidateGroup(g);
+            if (ValidateStudent(s)) return true;
+            else return false;
+        }
+
+        private void ClearErrorLabels()
+        {
+            List<FrameworkElement> spisok = new List<FrameworkElement>();
+            ChildControls(this, spisok);
+            foreach (Label l in spisok)
+            {
+                if (Regex.IsMatch(l.Name, "Err")) (this.FindName(l.Name) as Label).Content = "";
+            }
+
+        }
+
+        public void ChildControls(FrameworkElement elem, List<FrameworkElement> Controls)
+        {
+                foreach (FrameworkElement child in LogicalTreeHelper.GetChildren(elem))
+                {
+                    try
+                    {
+                        if (child is Label) Controls.Add(child);
+                        if (elem.GetType() != typeof(RowDefinition)) ChildControls(child, Controls);
+                    }
+                    catch { }
+                }
         }
     }
 }

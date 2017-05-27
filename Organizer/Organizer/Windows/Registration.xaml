@@ -7,51 +7,55 @@
         mc:Ignorable="d"
         Title="Registration" Height="400" Width="400" AutomationProperties.Name="W_Registration" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="14*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
-        </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Имя" FontSize="16"/>
-        <TextBox x:Name="_name" TabIndex="0" Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0" />
        
-        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Фамилия" FontSize="16"/>
-        <TextBox x:Name="_surname" TabIndex="1" Grid.Column="1" Grid.Row="1" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0" />
-       
-        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="№ студ. билета" FontSize="16"/>
-        <TextBox x:Name="_studID" TabIndex="2" Grid.Column="1" Grid.Row="2" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0" />
-       
-        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Курс" FontSize="16"/>
-        <TextBox x:Name="_course" TabIndex="3" Grid.Column="1" Grid.Row="3" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
-      
-        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Номер группы" FontSize="16"/>
-        <TextBox x:Name="_groupNum" TabIndex="4" Grid.Column="1" Grid.Row="4" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
-       
-        <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Подгруппа" FontSize="16"/>
-        <TextBox x:Name="_subGroup" TabIndex="5" Grid.Column="1" Grid.Row="5" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
-       
-        <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Логин" FontSize="16"/>
-        <TextBox x:Name="_login" TabIndex="6" Grid.Column="1" Grid.Row="6" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
-       
-        <Label Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Пароль" FontSize="16"/>
-        <PasswordBox x:Name="_password" TabIndex="7" Grid.Column="1" Grid.Row="7" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
-       
-        <Label Grid.Column="0" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,2,0,2" Content="Повторите пароль" FontSize="16"/>
-        <PasswordBox x:Name="_passwordReplied" TabIndex="8" Grid.Column="1" Grid.Row="8" VerticalContentAlignment="Center" Background="#FFE4E4E4" Margin="20,5,10,5" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
-      
-        <Button x:Name="RegistrationButton" Grid.Row="9" Grid.ColumnSpan="2" Width="140" Background="LawnGreen" FontSize="16" Content="Регистрация" Margin="0,7" Click="RegistrationButton_Click"/>
-
-
+        <DockPanel LastChildFill="True">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Margin="10,10,0,0">
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Margin="5,0" Content="ФИО" FontSize="16" Height="38"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Margin="5,0" Content="№ студ. билета" FontSize="16" Height="38"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Margin="5,0" Content="Курс" FontSize="16" Height="38"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Margin="5,0" Content="Номер группы" FontSize="16" Height="38"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Margin="5,0" Content="Подгруппа" FontSize="16" Height="38"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left"
+               Margin="5,0" Content="Логин" FontSize="16" Height="38"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left"
+               Margin="5,0" Content="Пароль" FontSize="16" Height="38"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Left" 
+               Margin="5,0" Content="Повторите пароль" FontSize="16" Height="38"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Width="200" Margin="10,10,0,0">
+                    <TextBox x:Name="_name" TabIndex="0" VerticalContentAlignment="Center" 
+                 Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0" Margin="0,3" />
+                    <Label  Name="nameErr" FontSize="9" Height="17" Background="White" Foreground="Red" Padding="5,0"/>
+                    <TextBox x:Name="_studID" TabIndex="2" VerticalContentAlignment="Center"
+                 Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0" />
+                    <Label  Name="idErr" FontSize="9" Height="17" Background="White" Foreground="Red" Padding="5,0"/>
+                    <TextBox x:Name="_course" TabIndex="3" VerticalContentAlignment="Center" 
+                 Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
+                    <Label  Name="courseErr" FontSize="9" Height="17" Background="White" Foreground="Red" Padding="5,0"/>
+                    <TextBox x:Name="_groupNum" TabIndex="4" VerticalContentAlignment="Center"
+                 Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
+                    <Label  Name="groupNumErr" FontSize="9" Height="18" Background="White" Foreground="Red" Padding="5,0"/>
+                    <TextBox x:Name="_subGroup" TabIndex="5" VerticalContentAlignment="Center" 
+                 Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
+                    <Label  Name="subgrErr" FontSize="9" Height="18" Background="White" Foreground="Red" Padding="5,0"/>
+                    <TextBox x:Name="_login" TabIndex="6" VerticalContentAlignment="Center"
+                 Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
+                    <Label Name="logErr" FontSize="9" Height="18" Background="White" Foreground="Red" Padding="5,0"/>
+                    <PasswordBox x:Name="_password" TabIndex="7" VerticalContentAlignment="Center" 
+                     Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
+                    <Label  Name="passErr" Padding="5,0" FontSize="9" Height="18" Background="White" Foreground="Red"/>
+                    <PasswordBox x:Name="_passwordReplied" TabIndex="8" VerticalContentAlignment="Center"
+                     Background="#FFE4E4E4" BorderThickness="0" FontSize="16" Padding="5,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+            <Button x:Name="RegistrationButton" Height="30" Width="140" Background="LawnGreen" 
+                FontSize="16" Content="Регистрация" Margin="0,7" Click="RegistrationButton_Click"/>
+        </DockPanel>
     </Grid>
 </Window>

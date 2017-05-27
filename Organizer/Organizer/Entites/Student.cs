@@ -8,7 +8,7 @@ namespace Organizer
 
     public partial class Student
     {
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Student()
         {
             Messages = new HashSet<Message>();
@@ -18,12 +18,14 @@ namespace Organizer
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [RegularExpression(@"^[0-9]{8}$", ErrorMessage = "idErr Номер студ.билета состоит из 8 цифр!")]
         public int IdStudent { get; set; }
 
         public int IdGroup { get; set; }
 
         [Required]
         [StringLength(50)]
+        [RegularExpression(@"^[\p{IsCyrillic}\s]+$", ErrorMessage = "nameErr Имя только из букв")]
         public string Name { get; set; }
 
         public byte[] Photo { get; set; }

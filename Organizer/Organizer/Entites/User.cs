@@ -14,6 +14,7 @@ namespace Organizer
 
         [Required]
         [StringLength(50)]
+        [RegularExpression(@"^[\S]{6,}$",ErrorMessage = "passErr Пароль от 6 символов без пробелов!")]
         public string Password { get; set; }
 
         public int IdStudent { get; set; }
