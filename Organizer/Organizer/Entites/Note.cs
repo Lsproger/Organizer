@@ -10,8 +10,17 @@ namespace Organizer.Entites
 {
     public class Note
     {
+        [Key]
+        [Required]
+        [Column(Order = 1)]
+        public int StudentId { get; set; }
+
+        [Key]
+        [Required]
+        [Column(Order = 0)]
         public string NoteDate { get; set; }
 
+        [MaxLength(300)]
         public string NoteDescription { get; set; }
     }
 }

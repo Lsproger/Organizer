@@ -4,6 +4,7 @@ namespace Organizer
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using Organizer.Entites;
 
     public partial class OrgContext : DbContext
     {
@@ -18,6 +19,7 @@ namespace Organizer
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<TimeTable> TimeTables { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Note> Notes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

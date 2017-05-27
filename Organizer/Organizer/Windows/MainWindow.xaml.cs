@@ -169,11 +169,11 @@ namespace Organizer
                 AddNoteButton.IsEnabled = false;
                 _noteText.IsEnabled = true;
             }
-
             else
             {
                 AddNoteButton.IsEnabled = true;
                 _noteText.IsEnabled = false;
+                _noteText.Text = "";
             }
         }
 
@@ -216,8 +216,6 @@ namespace Organizer
             ShowNote(n);
             ConfigurateControlsViaDate(date);
         }
-
-
 
         private void ReloadNotes()
         {
