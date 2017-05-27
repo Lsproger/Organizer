@@ -34,8 +34,8 @@ namespace Organizer
     {
         OrgContext db = new OrgContext();
         Student stud = new Student();
-        List<Note> Notes = new List<Note>(); 
-        
+        List<Note> Notes = new List<Note>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -53,19 +53,30 @@ namespace Organizer
             _progressList.Loaded += _progressList_Loaded;
             ExistingNotesList.Loaded += ExistingNotesList_Loaded;
             ExistingNotesList.SelectionChanged += ExistingNotesList_SelectionChanged;
-        }
 
+        }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _userName.Text = stud.Name;
-            _userID.Text = stud.IdStudent.ToString();
-            _otherInfo.Text = "Курс — " + stud.Group.Course + ", группа — " + stud.Group.Group_numb + "-" + stud.Group.Subgroup;
+
             LoadTimeTableIfEmpty();
             _week.Loaded += _week_Loaded;
             _week.SelectionChanged += _week_SelectionChanged;
             _calendar.Loaded += _calendar_Loaded;
             _calendar.SelectedDatesChanged += _calendar_SelectedDatesChanged;
+            ConfigurateControlsIfNotStarosta();
+        }
+
+        private void ConfigurateControlsIfNotStarosta()
+        {
+            if (!stud.IsStarosta)
+            {
+                _messageToDB.Foreground = Brushes.IndianRed;
+                _messageToDB.Text = "Извиняйте, сообщения могут оствлять только админ и староста дабы избежать дичайшего спама))))";
+                _messageToDB.IsReadOnly = true;
+                _messageToDB.Cursor = Cursors.Arrow;
+                SendMessageButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         #region TimeTable
@@ -161,7 +172,11 @@ namespace Organizer
 
         private void ExistingNotesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _calendar.SelectedDate = Convert.ToDateTime((ExistingNotesList.SelectedItem as Note).NoteDate);
+            try
+            {
+                _calendar.SelectedDate = Convert.ToDateTime((ExistingNotesList.SelectedItem as Note).NoteDate);
+            }
+            catch (NullReferenceException) { }
         }
 
         private void ExistingNotesList_Loaded(object sender, RoutedEventArgs e)
@@ -179,15 +194,18 @@ namespace Organizer
 
         private void ConfigurateControlsViaDate(DateTime date)
         {
+            ExistingNotesList.ItemsSource = Notes;
             if (IsNoteOnDateExist(date))
             {
                 AddNoteButton.IsEnabled = false;
+                DeleteNoteButton.IsEnabled = true;
                 _noteText.IsEnabled = true;
                 ExistingNotesList.SelectedItem = GetNoteOnDate(date);
             }
             else
             {
                 AddNoteButton.IsEnabled = true;
+                DeleteNoteButton.IsEnabled = false;
                 _noteText.IsEnabled = false;
                 _noteText.Text = "";
                 ExistingNotesList.SelectedItem = null;
@@ -201,7 +219,7 @@ namespace Organizer
 
         private Note GetNoteOnDate(DateTime d)
         {
-            Note note= new Note { NoteDescription = "", NoteDate = ""};
+            Note note = new Note { NoteDescription = "", NoteDate = "" };
             if (Notes.Find(n => n.NoteDate == d.ToShortDateString()) != null)
                 note = Notes.Find(n => n.NoteDate == d.ToShortDateString());
             return note;
@@ -219,7 +237,7 @@ namespace Organizer
         {
             DateTime d = Convert.ToDateTime(_calendar.SelectedDate);
             if (_noteText.Text != "")
-                db.Notes.Find(new object[] { d.ToShortDateString(), stud.IdStudent}).NoteDescription = _noteText.Text;
+                db.Notes.Find(new object[] { d.ToShortDateString(), stud.IdStudent }).NoteDescription = _noteText.Text;
             else
             {
                 try
@@ -234,7 +252,7 @@ namespace Organizer
         private void AddNoteButton_Click(object sender, RoutedEventArgs e)
         {
             DateTime date = Convert.ToDateTime(_calendar.SelectedDate);
-            Note n = new Note { NoteDate = date.ToShortDateString(), NoteDescription = "Новая заметочка!" , StudentId = stud.IdStudent};
+            Note n = new Note { NoteDate = date.ToShortDateString(), NoteDescription = "Новая заметочка!", StudentId = stud.IdStudent };
             db.Notes.Add(n);
             ReloadNotes();
             ShowNote(n);
@@ -281,29 +299,27 @@ namespace Organizer
         #region Messages
         private void _deleteMsg(object sender, RoutedEventArgs e)
         {
-
             using (OrgContext oc = new OrgContext())
             {
                 Message m = (_messages.SelectedItem as Message);
-
-                MessageBox.Show("Chekai:" + m.IdStudent + " " + m.MessageDate + " " + m.MessageText);
-                oc.Messages.Remove(oc.Messages.Find(m.MessId));
-                oc.SaveChanges();
-                _messages_Loaded(this, new RoutedEventArgs());
+                if (m.IdStudent == stud.IdStudent)
+                {
+                    oc.Messages.Remove(oc.Messages.Find(m.MessId));
+                    oc.SaveChanges();
+                    _messages_Loaded(this, new RoutedEventArgs());
+                }
+                else MessageBox.Show("Вы можете удалять тоолько свои сообщения(для старост)");
             }
         }
 
         private void _messages_Loaded(object sender, RoutedEventArgs e)
         {
-            db.Dispose();
-            db = new OrgContext();
-            db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb == stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
-            _messages.ItemsSource = db.Messages.Local;
+            LoadMessages();
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            if (_messageToDB.Text != "")
+            if (_messageToDB.Text != "" && stud.IsStarosta)
             {
                 Message msg = new Message
                 {
@@ -313,13 +329,26 @@ namespace Organizer
                 };
                 db.Messages.Add(msg);
                 db.SaveChanges();
-                db.Dispose();
-                db = new OrgContext();
-                db.Messages.Where(p => p.Student.Group.Course == stud.Group.Course && p.Student.Group.Group_numb == stud.Group.Group_numb).OrderByDescending(p => p.MessageDate).Load();
-                _messages.ItemsSource = db.Messages.Local;
+                LoadMessages();
+                ClearMessageArea();
             }
 
         }
+
+        private void ClearMessageArea()
+        {
+            _messageToDB.Text = "";
+        }
+
+        private void LoadMessages()
+        {
+            db.Dispose();
+            db = new OrgContext();
+            db.Messages.Distinct().OrderByDescending(p => p.MessageDate).Load();
+            _messages.ItemsSource = db.Messages.Local;
+        }
+
+        
         #endregion
 
         #region Tasks
@@ -338,12 +367,12 @@ namespace Organizer
 
         private void SetExistElementNotification()
         {
-                NotificationMessgeToProgress.Content = "Вы уже отслеживаете этот предмет";
+            NotificationMessgeToProgress.Content = "Вы уже отслеживаете этот предмет";
         }
 
         private void SetNoElementsNotification()
         {
-            if(_lessonsBox.Items.Count == 1)
+            if (_lessonsBox.Items.Count == 1)
                 NotificationMessgeToProgress.Content = "Для выбора предмета должно быть расписание:(";
         }
 
@@ -446,5 +475,10 @@ namespace Organizer
             }
         }
         #endregion
+
+        private void _messageToDB_KeyDown(object sender, KeyEventArgs e)
+        {
+            //if (e.Key == Key.LeftCtrl  Key.Enter)
+        }
     }
 }

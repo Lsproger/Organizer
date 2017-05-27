@@ -24,6 +24,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml.Linq;
 using System.Security.Cryptography;
+using Organizer.Windows;
 
 namespace Organizer
 {
@@ -49,19 +50,33 @@ namespace Organizer
                 {
                     u = new User { Login = _authLogin.Text, Password = GetMd5Hash(md5h, _authPassword.Password) };
                 }
-
-                foreach (var usr in db.Users)
+                try
                 {
-                    if (u.Login == usr.Login && u.Password == usr.Password)
+                    foreach (var usr in db.Users)
                     {
-                        if (_rememberUser.IsChecked == true)
-                            CreateRestoringFile(_authLogin.Text, _authPassword.Password);
-                        else
-                            CreateRestoringFile("", "");
-                        MainWindow wnd = new MainWindow(usr);
-                        wnd.Show();
-                        isgood = true;
+                        if (u.Login == usr.Login && u.Password == usr.Password)
+                        {
+                            if (_rememberUser.IsChecked == true)
+                                CreateRestoringFile(_authLogin.Text, _authPassword.Password);
+                            else
+                                CreateRestoringFile("", "");
+                            if (u.Login == "admin")
+                            {
+                                AdminWindow aw = new AdminWindow(usr);
+                                aw.Show();
+                            }
+                            else
+                            {
+                                MainWindow wnd = new MainWindow(usr);
+                                wnd.Show();
+                            }
+                            isgood = true;
+                        }
                     }
+                }
+                catch (System.Data.DataException)
+                {
+                    MessageBox.Show("Ошибка подключения к серверу!\r\nПроверьте своё подключение к интернету!");
                 }
                 if (!isgood)
                     MessageBox.Show("Логин или пароль введён неверно!");

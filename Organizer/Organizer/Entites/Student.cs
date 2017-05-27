@@ -23,12 +23,12 @@ namespace Organizer
 
         public int IdGroup { get; set; }
 
+        public bool IsStarosta { get; set; }
+
         [Required]
         [StringLength(50)]
         [RegularExpression(@"^[\p{IsCyrillic}\s]+$", ErrorMessage = "nameErr Имя только из букв")]
         public string Name { get; set; }
-
-        public byte[] Photo { get; set; }
 
         public virtual Group Group { get; set; }
 

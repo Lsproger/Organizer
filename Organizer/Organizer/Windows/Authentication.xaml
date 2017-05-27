@@ -30,7 +30,7 @@
         <CheckBox Grid.Row="5" x:Name="_rememberUser" Grid.ColumnSpan="5" Margin="10,0" VerticalContentAlignment="Center" AutomationProperties.Name="remember_me_checkbox" ToolTip="Check if you would like to authorize automatically">
             Входить автоматически
         </CheckBox>
-        <Button x:Name="_log_in" Grid.Row="7" Grid.Column="1" Content="Войти" BorderThickness="0" Background="Aquamarine" Click="_log_in_Click" AutomationProperties.Name="_log_in"/>
+        <Button x:Name="_log_in" Grid.Row="7" Grid.Column="1" Content="Войти" BorderThickness="0" Background="Aquamarine" Click="_log_in_Click" AutomationProperties.Name="_log_in" IsDefault="True"/>
         <Button x:Name="_gotoRegistration" Grid.Row="7" Grid.Column="3" Content="Регистрация" BorderThickness="0" Background="#FFECC1C1" Click="_gotoRegistration_Click" AutomationProperties.Name="_gotoRegistration"/>
 
     </Grid>

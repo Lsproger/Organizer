@@ -99,6 +99,9 @@
     <Compile Include="Entites\User.cs" />
     <Compile Include="ProgressStateConverter.cs" />
     <Compile Include="ViewModels\NotesViewMode.cs" />
+    <Compile Include="Windows\AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Authentication.xaml.cs">
       <DependentUpon>Authentication.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,10 @@
     <Compile Include="Entites\Temp.cs" />
     <Compile Include="ViewModels\TimetableViewModel.cs" />
     <Page Include="ListBoxViews.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AdminWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
