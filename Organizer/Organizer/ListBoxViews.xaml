@@ -22,7 +22,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ListBoxNotes" TargetType="{x:Type ListBoxItem}"  >
+    <Style x:Key="ListBoxLessons" TargetType="{x:Type ListBoxItem}"  >
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -31,14 +31,16 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <!-- <Setter Property="Foreground" Value="White"/>-->
+                            <Setter Property="Background" Value="WhiteSmoke"/>
                         </Trigger>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Background" Value="WhiteSmoke"/>
+                        </Trigger>
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
     </Style>
 
 </ResourceDictionary>

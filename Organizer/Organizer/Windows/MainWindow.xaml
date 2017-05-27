@@ -20,15 +20,6 @@
         <ImageBrush x:Key="_minusImage" ImageSource="@..\..\..\Resources\minus.png"/>
         <ImageBrush x:Key="_plusImage" ImageSource="@..\..\..\Resources\plus.png"/>
         <ImageBrush x:Key="_sendMessageImage" ImageSource="@..\..\..\Resources\sendMessage.png"/>
-
-        <!--<Style x:Key="SelectIfMouseOn">
-            <Style.Triggers>
-                <Trigger Property="Button.MouseOver" Value="true">
-                    <Setter Property="Is">
-                </Trigger>
-            </Style.Triggers>
-        </Style>-->
-
     </Window.Resources>
 
     <Grid Margin="0">
@@ -59,6 +50,7 @@
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksPlus_Click" Height="15" Label="+" Background="#FFA4A5A6"/>
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksMinus_Click" Height="15" Label="-" Background="#FFA4A5A6"/>
                                                 </StackPanel>
+                                                <Custom:RibbonButton Width="30" FontSize="24" Label="X"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Сдано заданий"/>
@@ -127,44 +119,45 @@
                     </LinearGradientBrush>
                 </TabItem.Background>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0.06*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <ListBox Name="_lessons" VerticalContentAlignment="Stretch" Grid.Row="1" 
-                                                        SelectedItem="{Binding SelectedTimeTable}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal"  Margin="5,0">
-                                    <TextBlock Width="100" Text="{Binding Path=Day, Converter={StaticResource DayConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                    <TextBlock Width="70" Text="{Binding Path=LessonNumber, Converter={StaticResource LessonConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                    <TextBlock Width="50" Text="{Binding Path=Auditorium, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <TextBlock Width="30" Text="{Binding Path=LessonType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <TextBlock Width="300" Text="{Binding Path=LessonName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" DataContext="{Binding SelectedTimeTable}">
-                        <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Width="100" Text="{Binding Day, Converter={StaticResource DayConverter}, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" />
-                        <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Width="70" Text="{Binding LessonNumber, Converter={StaticResource LessonConverter},  UpdateSourceTrigger=LostFocus, Mode=TwoWay}" />
-                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Text="Аудитория" />
-                        <TextBox Margin="5,0,15,0" VerticalContentAlignment="Center" Width="70" Text="{Binding Auditorium, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" LostFocus="TextBox_LostFocus"  />
-                        <TextBlock VerticalAlignment="Center" Text="Тип" />
-                        <TextBox Margin="5,0,15,0" VerticalContentAlignment="Center"   Width="50" Text="{Binding LessonType, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"  LostFocus="TextBox_LostFocus"/>
-                        <TextBlock VerticalAlignment="Center" Text="Предмет" />
-                        <TextBox Margin="5,0,15,0" VerticalContentAlignment="Center" Width="200" Text="{Binding LessonName, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"  LostFocus="TextBox_LostFocus"  />
-                        <TextBlock VerticalAlignment="Center" Text="Учебная неделя"/>
-                        <ComboBox Margin="5,0" Name="_week">
-                            <ComboBoxItem Content="Первая"/>
-                            <ComboBoxItem>
-                                Вторая
-                            </ComboBoxItem>
-                        </ComboBox>
-                    </StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" DataContext="{Binding SelectedTimeTable}">
+                            <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Width="100" Text="{Binding Day, Converter={StaticResource DayConverter}, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Cursor="Arrow" />
+                            <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Width="70" Text="{Binding LessonNumber, Converter={StaticResource LessonConverter},  UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Cursor="Arrow" />
+                            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Text="Аудитория" />
+                            <TextBox Margin="5,0,15,0" VerticalContentAlignment="Center" Width="70" Text="{Binding Auditorium, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" LostFocus="TextBox_LostFocus"  />
+                            <TextBlock VerticalAlignment="Center" Text="Тип" />
+                            <TextBox Margin="5,0,15,0" VerticalContentAlignment="Center"   Width="50" Text="{Binding LessonType, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"  LostFocus="TextBox_LostFocus"/>
+                            <TextBlock VerticalAlignment="Center" Text="Предмет" />
+                            <TextBox Margin="5,0,15,0" VerticalContentAlignment="Center" Width="200" Text="{Binding LessonName, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"  LostFocus="TextBox_LostFocus"  />
+                            <TextBlock VerticalAlignment="Center" Text="Учебная неделя"/>
+                            <ComboBox Margin="5,0" Name="_week">
+                                <ComboBoxItem Content="Первая"/>
+                                <ComboBoxItem>
+                                    Вторая
+                                </ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <ListBox ItemContainerStyle="{StaticResource ListBoxLessons}" Padding="0" DockPanel.Dock="Right" Width="500" Name="_lessons" SelectedItem="{Binding SelectedTimeTable}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" Background="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0" Height="16" CanVerticallyScroll="False" OpacityMask="{x:Null}">
+                                        <TextBlock  Margin="10,0,0,0" Width="70" Text="{Binding Path=LessonNumber, Converter={StaticResource LessonConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        <TextBlock Width="50" Text="{Binding Path=Auditorium, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        <TextBlock Width="30" Text="{Binding Path=LessonType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        <TextBlock Width="300" Text="{Binding Path=LessonName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Orientation="Vertical">
+                            <Label Height="81" Content="Понедельник" FontSize="30" VerticalContentAlignment="Center" Background="#FFF7F5F5" />
+                            <Label Height="81" Content="Вторник" FontSize="30" VerticalContentAlignment="Center" Background="#FFF5E8DE"/>
+                            <Label Height="81" Content="Среда" FontSize="30" VerticalContentAlignment="Center" Background="#FFF1F183"/>
+                            <Label Height="81" Content="Четверг" FontSize="30" VerticalContentAlignment="Center" Background="#FFF3F351"/>
+                            <Label Height="81" Content="Пятница" FontSize="30" VerticalContentAlignment="Center" Background="#FFFFFF2E"/>
+                            <Label Height="81" Content="Суббота" FontSize="30" VerticalContentAlignment="Center" Background="#FFC5F71B"/>
+                        </StackPanel>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="ДОСКА ОБЪЯВЛЕНИЙ" Margin="-3,0,0,0" BorderThickness="1,0,0,0" BorderBrush="{x:Null}">
