@@ -151,29 +151,40 @@ namespace Organizer.Windows
 
         private string CurrentWeek()
         {
-            int end;
-            int diaposone;
-            DateTime firstSept = new DateTime(DateTime.Now.Year, 9, 1);
-            end = DateTime.Now.DayOfYear;
-            if (DateTime.Now.Month >= 9)
+            int dayStart = FirstSeptDay().DayOfYear - (int)FirstSeptDay().DayOfWeek + 1;//Номер понедельника в году в неделе с первым сентября
+            if ((DaysSinceStart(dayStart) / 7) % 2 == 0)
             {
-                diaposone = end - firstSept.DayOfYear + (int)firstSept.DayOfWeek;
-                if ((int)((diaposone + 7) / 7) % 2 == 0)
-                {
-                    return "Первая";
-                }
-                else return "Вторая";
+                return "Первая";
+            }
+            else return "Вторая";
+        }
+
+        private int DaysSinceStart(int dayStart)
+        {
+            if (DateTime.Now.Month > 8)
+            {
+                return DateTime.Now.DayOfYear - dayStart;
             }
             else
             {
-                diaposone = 365 - (firstSept.DayOfYear - end) - (int)firstSept.DayOfWeek;
-                if ((diaposone / 7) % 2 == 0)
-                {
-                    return "Первая";
-                }
-                else return "Вторая";
+                if (DateTime.IsLeapYear(FirstSeptDay().Year))
+                    return 366 - dayStart + DateTime.Now.DayOfYear;
+                else
+                    return 365 - dayStart + DateTime.Now.DayOfYear;
             }
         }
+
+        private DateTime FirstSeptDay()
+        {
+            DateTime d = DateTime.Now;
+            DateTime ds;
+            if (d.Month < 9)
+                ds = new DateTime(DateTime.Now.Year - 1, 9, 1);
+            else
+                ds = new DateTime(DateTime.Now.Year, 9, 1);
+            return ds;
+        }
+
         #endregion
 
         #region Notes

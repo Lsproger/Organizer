@@ -44,7 +44,7 @@ namespace Organizer
         public MainWindow(User u)
         {
             InitializeComponent();
-            Notes = db.Notes.Where(n=>n.StudentId == u.IdStudent).ToList();
+            Notes = db.Notes.Where(n => n.StudentId == u.IdStudent).ToList();
             stud = u.Student;
             this.Loaded += MainWindow_Loaded;
             _messages.Loaded += _messages_Loaded;
@@ -64,7 +64,7 @@ namespace Organizer
             _week.SelectionChanged += _week_SelectionChanged;
             _calendar.Loaded += _calendar_Loaded;
             _calendar.SelectedDatesChanged += _calendar_SelectedDatesChanged;
-            
+
         }
 
         private void ConfigurateControlsIfNotStarosta()
@@ -143,29 +143,40 @@ namespace Organizer
 
         private string CurrentWeek()
         {
-            int end;
-            int diaposone;
-            DateTime firstSept = new DateTime(DateTime.Now.Year, 9, 1);
-            end = DateTime.Now.DayOfYear;
-            if (DateTime.Now.Month >= 9)
+            int dayStart = FirstSeptDay().DayOfYear - (int)FirstSeptDay().DayOfWeek + 1;//Номер понедельника в году в неделе с первым сентября
+            if ( (DaysSinceStart(dayStart) / 7) % 2 ==0 )
             {
-                diaposone = end - firstSept.DayOfYear + (int)firstSept.DayOfWeek;
-                if ((int)((diaposone + 7) / 7) % 2 == 0)
-                {
-                    return "Первая";
-                }
-                else return "Вторая";
+                return "Первая";
+            }
+            else return "Вторая";
+        }
+
+        private int DaysSinceStart(int dayStart)
+        {
+            if (DateTime.Now.Month > 8)
+            {
+                return DateTime.Now.DayOfYear - dayStart;
             }
             else
             {
-                diaposone = 365 - (firstSept.DayOfYear - end) - (int)firstSept.DayOfWeek;
-                if ((diaposone / 7) % 2 == 0)
-                {
-                    return "Первая";
-                }
-                else return "Вторая";
+                if (DateTime.IsLeapYear(FirstSeptDay().Year))
+                    return 366 - dayStart + DateTime.Now.DayOfYear;
+                else
+                    return 365 - dayStart + DateTime.Now.DayOfYear;
             }
         }
+
+        private DateTime FirstSeptDay()
+        {
+            DateTime d = DateTime.Now;
+            DateTime ds;
+            if (d.Month < 9)
+                ds = new DateTime(DateTime.Now.Year - 1, 9, 1);
+            else
+                ds = new DateTime(DateTime.Now.Year, 9, 1);
+            return ds;
+        }
+
         #endregion
 
         #region Notes
@@ -286,7 +297,7 @@ namespace Organizer
 
         private void LoadNotes()
         {
-            Notes = db.Notes.Where(n=>n.StudentId==stud.IdStudent).ToList();
+            Notes = db.Notes.Where(n => n.StudentId == stud.IdStudent).ToList();
         }
 
         private void SaveNotes()
@@ -347,7 +358,7 @@ namespace Organizer
             _messages.ItemsSource = db.Messages.Local;
         }
 
-        
+
         #endregion
 
         #region Tasks
@@ -473,6 +484,32 @@ namespace Organizer
                 _progressList.ItemsSource = oc.Progresses.Local;
             }
         }
-        #endregion       
+        #endregion
+
+        private void RibbonButton_Click(object sender, RoutedEventArgs e)
+        {
+            Progress p = _progressList.SelectedItem as Progress;
+            if (IsYesMessageBoxResult())
+            {
+                DeleteProgress(p);
+                UpdateTasks();
+            }
+        }
+
+        private void DeleteProgress(Progress p)
+        {
+            using (OrgContext oc = new OrgContext())
+            {
+                oc.Progresses.Remove(oc.Progresses.Find(new object[] { p.TaskId }));
+                oc.SaveChanges();
+            }
+        }
+
+        private bool IsYesMessageBoxResult()
+        {
+            if (MessageBox.Show("Вы уверены?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                return true;
+            else return false;
+        }
     }
 }

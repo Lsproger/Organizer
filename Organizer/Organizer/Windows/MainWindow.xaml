@@ -50,7 +50,7 @@
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksPlus_Click" Height="15" Label="+" Background="#FFA4A5A6"/>
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksMinus_Click" Height="15" Label="-" Background="#FFA4A5A6"/>
                                                 </StackPanel>
-                                                <Custom:RibbonButton Width="24" FontSize="24" Label="x"/>
+                                                <Custom:RibbonButton Click="RibbonButton_Click"  Width="24" FontSize="20" Label="x"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Сдано заданий"/>

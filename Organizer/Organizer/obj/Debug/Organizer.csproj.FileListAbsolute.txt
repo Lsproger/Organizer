@@ -64,4 +64,3 @@ D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Or
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Organizer.csproj.GenerateResource.Cache
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Organizer.exe
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Organizer.pdb
-D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Organizer.csprojResolveAssemblyReference.cache
