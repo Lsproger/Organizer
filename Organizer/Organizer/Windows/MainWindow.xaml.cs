@@ -53,7 +53,23 @@ namespace Organizer
             ExistingNotesList.SelectionChanged += ExistingNotesList_SelectionChanged;
             _lessonsBox.Loaded += _lessonsBox_Loaded;
             _progressList.Loaded += _progressList_Loaded;
+            AddNotificationsToAutorun();
+        }
 
+        private void AddNotificationsToAutorun()
+        {
+            // ткрываем нужную ветку в реестре   
+            // @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\"  
+
+            Microsoft.Win32.RegistryKey Key =
+                Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\", true);
+            string path = System.IO.Path.GetFullPath(@"..\..\..\..\NotificationsOrganizer\NotificationsOrganizer\bin\Release\NotificationsOrganizer.exe");
+            //добавляем первый параметр - название ключа  
+            // Второй параметр - это путь к   
+            // исполняемому файлу нашей программы.  
+            Key.SetValue("NtOrg", "D:\\Release\\NotificationsOrganizer.exe");
+            Key.Close();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -154,16 +170,12 @@ namespace Organizer
         private int DaysSinceStart(int dayStart)
         {
             if (DateTime.Now.Month > 8)
-            {
                 return DateTime.Now.DayOfYear - dayStart;
-            }
             else
-            {
                 if (DateTime.IsLeapYear(FirstSeptDay().Year))
                     return 366 - dayStart + DateTime.Now.DayOfYear;
                 else
                     return 365 - dayStart + DateTime.Now.DayOfYear;
-            }
         }
 
         private DateTime FirstSeptDay()

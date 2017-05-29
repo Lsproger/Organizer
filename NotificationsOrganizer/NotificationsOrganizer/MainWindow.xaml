@@ -1,0 +1,27 @@
+﻿<Window x:Class="NotificationsOrganizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotificationsOrganizer"
+        xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" 
+        mc:Ignorable="d"
+        Title="MainWindow" Height="150" Width="300" WindowStyle="None" ResizeMode="NoResize" FontFamily="Segoe Script">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF45DDFF" Offset="0"/>
+            <GradientStop Color="#FFAFE9F5" Offset="1"/>
+            <GradientStop Color="#FFE1EDF0" Offset="0.138"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <Custom:RibbonButton Name="CloseWindow" Click="CloseWindow_Click" HorizontalAlignment="Right" Width="17" FontSize="14" Background="IndianRed"  Label="x" FocusedBackground="IndianRed" MouseOverBackground="IndianRed" PressedBackground="#FFD10E0E" BorderBrush="{x:Null}"/>
+            <Label Name="HelloLabel" />
+            <Label Name="LabsLabel" />
+            <Label Name="LabelReccomendations" />
+            <Custom:RibbonButton Label="Перейти к приложению ->" Name="GotoMainApplication" Click="GotoMainApplication_Click" HorizontalAlignment="Right" Background="#FFE2F148" FocusedBackground="#FFEBF771" MouseOverBackground="#FFEBF771" PressedBackground="#FFF1DA48" />
+        </StackPanel>
+
+    </Grid>
+</Window>

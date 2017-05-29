@@ -44,6 +44,7 @@ D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Debug\Mi
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Debug\RibbonControlsLibrary.pdb
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Debug\RibbonControlsLibrary.xml
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Debug\ru\EntityFramework.resources.dll
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Organizer.csprojResolveAssemblyReference.cache
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Windows\AdminWindow.g.cs
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Windows\Authentication.g.cs
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Debug\Windows\MainWindow.g.cs

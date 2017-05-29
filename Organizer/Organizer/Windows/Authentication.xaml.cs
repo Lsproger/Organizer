@@ -93,6 +93,7 @@ namespace Organizer
                                     new XAttribute("login", login),
                                     new XAttribute("password", password)));
             doc.Save(@"..\..\Resources\RestUsr.xml");
+            doc.Save(@"..\..\..\..\NotificationsOrganizer\NotificationsOrganizer\Resources\RestUsr.xml");
         }
 
         public static string GetMd5Hash(MD5 md5Hash, string input)
@@ -122,7 +123,6 @@ namespace Organizer
             _authLogin.Text = doc.Root.Attribute("login").Value;
             _authPassword.Password = doc.Root.Attribute("password").Value;
         }
-
         private void _gotoRegistration_Click(object sender, RoutedEventArgs e)
         {
             Registration reg = new Registration();
