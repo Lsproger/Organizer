@@ -39,13 +39,37 @@ namespace Organizer.Windows
 
         private void StudentsGrid_LostFocus(object sender, RoutedEventArgs e)
         {
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                foreach(var exc in ex.EntityValidationErrors)
+                {
+                    foreach (var err in (exc as System.Data.Entity.Validation.DbEntityValidationResult).ValidationErrors)
+                    {
+                        MessageBox.Show((err as System.Data.Entity.Validation.DbValidationError).ErrorMessage );
+                        break;
+                    }
+                    break;
+                }
+                
+            }
+            catch (System.InvalidOperationException ex) { MessageBox.Show(ex.Message); }
         }
 
         private void StudentsGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            db.Students.Where(s => s.Name != "Admin").Load();
-            StudentsGrid.ItemsSource = db.Students.Local;
+            try
+            {
+                db.Students.Where(s => s.Name != "Admin").Load();
+                StudentsGrid.ItemsSource = db.Students.Local;
+            }
+            catch (System.Data.Entity.Core.EntityCommandExecutionException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void AdminWindow_Loaded(object sender, RoutedEventArgs e)
@@ -293,7 +317,7 @@ namespace Organizer.Windows
         {
             DateTime date = Convert.ToDateTime(_calendar.SelectedDate);
             Note note = Notes.Find(n => n.NoteDate == date.ToShortDateString());
-            db.Notes.Remove(db.Notes.Find(new object[] { note.NoteDate, note.StudentId}));
+            db.Notes.Remove(note);
             ReloadNotes();
             ConfigurateControlsViaDate(date);
         }
@@ -306,12 +330,16 @@ namespace Organizer.Windows
 
         private void LoadNotes()
         {
-            Notes = db.Notes.Where(n=>n.StudentId==stud.IdStudent).ToList();
+            Notes = db.Notes.Where(n => n.StudentId == stud.IdStudent).ToList();
         }
 
         private void SaveNotes()
         {
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Core.EntityException) { MessageBox.Show("Проверьте подключение к интернету"); }
         }
         #endregion
 

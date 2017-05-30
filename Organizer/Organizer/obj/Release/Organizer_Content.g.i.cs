@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/addnotepic.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/schedule_scheduled_tasks_calendar_list_folder.ico")]
 
 

@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Xml.Linq;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace NotificationsOrganizer
 {
@@ -27,27 +28,70 @@ namespace NotificationsOrganizer
         User u = new User();
         OrgContext db = new OrgContext();
         List<TimeTable> Labs = new List<TimeTable>();
+        List<Note> Notes = new List<Note>();
         bool IsICanWork;
-        string week;
-        DispatcherTimer t = new DispatcherTimer();
-        
+        string week;        
 
         public MainWindow()
         {
             InitializeComponent();
-            t.Interval = new TimeSpan(50000000);
-            t.Tick += T_Tick;
             SetWindowPosition();
-            GetUserOnTimer();
-            LetItWork();
-            SetNotification();
+            this.Loaded += MainWindow_Loaded;
         }
 
-        private void SetNotification()
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            GetUser();
+            LetItWork();
+            if (u.Login != "admin")
+                SetNotificationsUser();
+            else SetNotificationAdmin();
+        }
+
+        private void SetNotificationsUser()
         {
             HelloLabel.Content = "Здравствуй, " + u.Student.Name + "!";
             SetNotificationLabs(Labs.Count);
             SetNotificationReccomendations(Labs.Count);
+            SetNotificationNotes();
+        }
+
+        private void SetNotificationAdmin()
+        {
+            HelloLabel.Content = "Здравствуй, " + u.Student.Name + "!";
+            LabsLabel.Visibility = Visibility.Collapsed;
+            LabelReccomendations.Visibility = Visibility.Collapsed;
+            SetNotificationNotes();
+        }
+
+        private void SetNotificationNotes()
+        {
+            DateTime d = DateTime.Now.Date;
+            Notes = db.Notes.Where(n => n.StudentId == u.IdStudent).ToList();
+            DeleteLastNotes();
+            try
+            {
+                LabelNote1.Content = Notes[0].NoteDate + "   " + Notes[0].NoteDescription;
+                LabelNote2.Content = Notes[1].NoteDate + "   " + Notes[1].NoteDescription;
+                LabelNote3.Content = Notes[2].NoteDate + "   " + Notes[2].NoteDescription;
+            }
+            catch (NullReferenceException) { }
+            catch (ArgumentNullException) { }
+            catch (ArgumentOutOfRangeException) { }
+        }
+
+        private void DeleteLastNotes()
+        {
+            try
+            {
+                if (Convert.ToDateTime(Notes.First().NoteDate) < DateTime.Now.Date)
+                {
+                    Notes.Remove(Notes.First());
+                    DeleteLastNotes();
+                }
+            }
+            catch (ArgumentNullException) { }
+            catch (InvalidOperationException) { }
         }
 
         private void SetNotificationReccomendations(int labsNumber)
@@ -78,7 +122,7 @@ namespace NotificationsOrganizer
             switch (labsNumber)
             {
                 case 0:
-                    LabsLabel.Content = "Завтра у вас нет лабараторных, можете отдохнуть :3";
+                    LabsLabel.Content = "Завтра у вас нет лаб, можете отдохнуть :3";
                     break;
                 case 1:
                     LabsLabel.Content = "Завтра у вас " + Labs.Count + " лабараторная работа: " + "\r\n" + labi;
@@ -92,10 +136,13 @@ namespace NotificationsOrganizer
 
         private void LetItWork()
         {
-            week = CurrentWeek();
-            LoadLabsOnTomorrow();
-            IsICanWork = IsThereLabsOnTomorrow();
-            if (!IsICanWork) this.Close();
+            if (u.Login != "admin")
+            {
+                week = CurrentWeek();
+                LoadLabsOnTomorrow();
+                IsICanWork = IsThereLabsOnTomorrow();
+            }
+            
         }
 
         private bool IsThereLabsOnTomorrow()
@@ -159,29 +206,16 @@ namespace NotificationsOrganizer
             Top = primaryMonitorArea.Bottom - Height - 30;
         }
 
-        private void T_Tick(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private bool GetUser()
+        private void GetUser()
         {
             try
             {
-                XDocument doc = XDocument.Load(@"..\..\Resources\RestUsr.xml");
+                XDocument doc = XDocument.Load(@"Resources\RestUsr.xml");
                 u =  db.Users.Find(new object[] { doc.Root.Attribute("login").Value });
-                if (u.Login != null) return true;
-                else return false;
+                if (u.Login == null) GetUser();
             }
-            catch (NullReferenceException) { IsICanWork = false; return false; }
-            catch (System.Data.DataException) { IsICanWork = false; return false; }
-        }
-
-        private void GetUserOnTimer()
-        {
-            t.Start();
-            if (GetUser())
-                t.Stop();
+            catch (NullReferenceException) { IsICanWork = false; }
+            catch (System.Data.DataException) { IsICanWork = false; }
         }
 
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
@@ -191,7 +225,7 @@ namespace NotificationsOrganizer
 
         private void GotoMainApplication_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(@"..\..\..\..\Organizer\Organizer\bin\Release\Organizer.exe");
+            System.Diagnostics.Process.Start(@"..\Organizer.exe");
         }
     }
 }

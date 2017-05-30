@@ -12,6 +12,7 @@ D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Release\
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Release\RibbonControlsLibrary.pdb
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Release\RibbonControlsLibrary.xml
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Release\ru\EntityFramework.resources.dll
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\bin\Release\ru\EntityFramework.SqlServer.resources.dll
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Windows\AdminWindow.g.cs
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Windows\Authentication.g.cs
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Windows\MainWindow.g.cs
@@ -21,7 +22,6 @@ D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Organizer_MarkupCompile.cache
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Organizer_MarkupCompile.lref
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\App.baml
-D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\ListBoxViews.baml
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Windows\AdminWindow.baml
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Windows\Authentication.baml
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Windows\MainWindow.baml
@@ -32,3 +32,4 @@ D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Organizer.csproj.GenerateResource.Cache
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Organizer.exe
 D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Organizer.pdb
+D:\Учёба\ООП\2 семестр\Organizer\Organizer\Organizer\obj\Release\Resources\ListBoxViews.baml

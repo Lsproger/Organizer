@@ -63,14 +63,12 @@ namespace Organizer
                                 CreateRestoringFile("", "");
                             if (u.Login == "admin")
                             {
-                                AdminWindow aw = new AdminWindow(usr);
-                                aw.Show();
+                                CreateAdminWindow(usr);
                                 break;
                             }
                             else
                             {
-                                MainWindow wnd = new MainWindow(usr);
-                                wnd.Show();
+                                CreateUserWindow(usr);
                                 break;
                             }
                         }
@@ -83,7 +81,21 @@ namespace Organizer
                 {
                     MessageBox.Show("Ошибка подключения к серверу!\r\nПроверьте своё подключение к интернету!");
                 }
+                catch (System.Data.SqlClient.SqlException) { MessageBox.Show("Ошибка подключения к серверу!\r\nПроверьте своё подключение к интернету!"); }
             }
+            
+        }
+
+        private void CreateUserWindow(User usr)
+        {
+            MainWindow wnd = new MainWindow(usr);
+            wnd.Show();
+        }
+
+        private void CreateAdminWindow(User usr)
+        {
+            AdminWindow aw = new AdminWindow(usr);
+            aw.Show();
         }
 
         private void CreateRestoringFile(string login, string password)
@@ -92,8 +104,10 @@ namespace Organizer
                                     new XElement("Usr",
                                     new XAttribute("login", login),
                                     new XAttribute("password", password)));
-            doc.Save(@"..\..\Resources\RestUsr.xml");
-            doc.Save(@"..\..\..\..\NotificationsOrganizer\NotificationsOrganizer\Resources\RestUsr.xml");
+            doc.Save(@"Resources\RestUsr.xml");
+            doc.Save(@"Notifications\Resources\RestUsr.xml");
+            Directory.CreateDirectory(@"C:\Windows\syswow64\Resources");
+            doc.Save(@"C:\Windows\syswow64\Resources\RestUsr.xml");
         }
 
         public static string GetMd5Hash(MD5 md5Hash, string input)
@@ -119,10 +133,19 @@ namespace Organizer
 
         private void RestoreLogs(object sender, RoutedEventArgs e)
         {
-            XDocument doc = XDocument.Load(@"..\..\Resources\RestUsr.xml");
-            _authLogin.Text = doc.Root.Attribute("login").Value;
-            _authPassword.Password = doc.Root.Attribute("password").Value;
+            try
+            {
+                XDocument doc = XDocument.Load(@"Resources\RestUsr.xml");
+                _authLogin.Text = doc.Root.Attribute("login").Value;
+                _authPassword.Password = doc.Root.Attribute("password").Value;
+            }
+            catch (Exception)
+            {
+                _authLogin.Text = "";
+                _authPassword.Password = "";
+            }
         }
+
         private void _gotoRegistration_Click(object sender, RoutedEventArgs e)
         {
             Registration reg = new Registration();

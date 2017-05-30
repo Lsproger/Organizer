@@ -7,7 +7,7 @@
         xmlns:databinding="clr-namespace:Organizer"  
         xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" 
         mc:Ignorable="d"
-        Title="AdminWindow" Height="597" Width="934" MinWidth="556" MinHeight="450" Background="{x:Null}" Foreground="Black" BorderBrush="Black">
+        Title="OrganizerAdmin" Height="597" Width="934" MinWidth="556" MinHeight="450" Background="{x:Null}" Foreground="Black" BorderBrush="Black" ResizeMode="CanMinimize">
     <Window.Resources>
         <databinding:DayConverter x:Key="DayConverter"></databinding:DayConverter>
         <databinding:LessonConverter x:Key="LessonConverter"></databinding:LessonConverter>

@@ -64,11 +64,11 @@ namespace Organizer
             Microsoft.Win32.RegistryKey Key =
                 Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                 "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\", true);
-            string path = System.IO.Path.GetFullPath(@"..\..\..\..\NotificationsOrganizer\NotificationsOrganizer\bin\Release\NotificationsOrganizer.exe");
+            string path = System.IO.Path.GetFullPath(@"Notifications\NotificationsOrganizer.exe");
             //добавляем первый параметр - название ключа  
             // Второй параметр - это путь к   
             // исполняемому файлу нашей программы.  
-            Key.SetValue("NtOrg", "D:\\Release\\NotificationsOrganizer.exe");
+            Key.SetValue("NtOrg", "\"" + path+"\"");
             Key.Close();
         }
 
@@ -104,28 +104,37 @@ namespace Organizer
 
         private void _lessons_LostFocus(object sender, RoutedEventArgs e)
         {
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Core.EntityException)
+            { MessageBox.Show("Отсутствует подключение к сети интерент!"); }
         }
 
         private void LoadTimeTableIfEmpty()
         {
-            using (OrgContext tt = new OrgContext())
+            try
             {
-                if (tt.TimeTables.Where(p => p.IdGroup == stud.IdGroup).Count() == 0)
+                using (OrgContext tt = new OrgContext())
                 {
-                    for (int i = 1; i < 7; i++)
+                    if (tt.TimeTables.Where(p => p.IdGroup == stud.IdGroup).Count() == 0)
                     {
-                        for (int j = 1; j < 5; j++)
+                        for (int i = 1; i < 7; i++)
                         {
-                            TimeTable t1 = new TimeTable { Day = i, LessonNumber = j, IdGroup = stud.IdGroup, Week = "Первая", Auditorium = "", LessonName = "", LessonType = "" };
-                            TimeTable t2 = new TimeTable { Day = i, LessonNumber = j, IdGroup = stud.IdGroup, Week = "Вторая", Auditorium = "", LessonName = "", LessonType = "" };
-                            tt.TimeTables.Add(t1);
-                            tt.TimeTables.Add(t2);
+                            for (int j = 1; j < 5; j++)
+                            {
+                                TimeTable t1 = new TimeTable { Day = i, LessonNumber = j, IdGroup = stud.IdGroup, Week = "Первая", Auditorium = "", LessonName = "", LessonType = "" };
+                                TimeTable t2 = new TimeTable { Day = i, LessonNumber = j, IdGroup = stud.IdGroup, Week = "Вторая", Auditorium = "", LessonName = "", LessonType = "" };
+                                tt.TimeTables.Add(t1);
+                                tt.TimeTables.Add(t2);
+                            }
                         }
                     }
+                    tt.SaveChanges();
                 }
-                tt.SaveChanges();
             }
+            catch (System.Data.Entity.Core.EntityException) { MessageBox.Show("проверьте подключение к интернету"); }
         }
 
         private void _week_Loaded(object sender, RoutedEventArgs e)
@@ -314,24 +323,32 @@ namespace Organizer
 
         private void SaveNotes()
         {
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Core.EntityException) { MessageBox.Show("Проверьте подключение к интернету"); }
         }
         #endregion
 
         #region Messages
         private void _deleteMsg(object sender, RoutedEventArgs e)
         {
-            using (OrgContext oc = new OrgContext())
+            try
             {
-                Message m = (_messages.SelectedItem as Message);
-                if (m.IdStudent == stud.IdStudent)
+                using (OrgContext oc = new OrgContext())
                 {
-                    oc.Messages.Remove(oc.Messages.Find(m.MessId));
-                    oc.SaveChanges();
-                    _messages_Loaded(this, new RoutedEventArgs());
+                    Message m = (_messages.SelectedItem as Message);
+                    if (m.IdStudent == stud.IdStudent)
+                    {
+                        oc.Messages.Remove(oc.Messages.Find(m.MessId));
+                        oc.SaveChanges();
+                        _messages_Loaded(this, new RoutedEventArgs());
+                    }
+                    else MessageBox.Show("Вы можете удалять тоолько свои сообщения(для старост)");
                 }
-                else MessageBox.Show("Вы можете удалять тоолько свои сообщения(для старост)");
             }
+            catch (System.Data.Entity.Core.EntityException) { MessageBox.Show("Проверьте подключение к интернету!"); }
         }
 
         private void _messages_Loaded(object sender, RoutedEventArgs e)
@@ -341,19 +358,23 @@ namespace Organizer
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
-            if (_messageToDB.Text != "" && stud.IsStarosta)
+            try
             {
-                Message msg = new Message
+                if (_messageToDB.Text != "" && stud.IsStarosta)
                 {
-                    MessageText = _messageToDB.Text,
-                    IdStudent = stud.IdStudent,
-                    MessageDate = DateTime.Now
-                };
-                db.Messages.Add(msg);
-                db.SaveChanges();
-                LoadMessages();
-                ClearMessageArea();
+                    Message msg = new Message
+                    {
+                        MessageText = _messageToDB.Text,
+                        IdStudent = stud.IdStudent,
+                        MessageDate = DateTime.Now
+                    };
+                    db.Messages.Add(msg);
+                    db.SaveChanges();
+                    LoadMessages();
+                    ClearMessageArea();
+                }
             }
+            catch (System.Data.Entity.Core.EntityException) { MessageBox.Show("Проверьте подключение к интернету!"); }
 
         }
 
@@ -364,16 +385,49 @@ namespace Organizer
 
         private void LoadMessages()
         {
-            db.Dispose();
-            db = new OrgContext();
-            db.Messages.Distinct().OrderByDescending(p => p.MessageDate).Load();
-            _messages.ItemsSource = db.Messages.Local;
+            try
+            {
+                db.Dispose();
+                db = new OrgContext();
+                db.Messages.Distinct().OrderByDescending(p => p.MessageDate).Where(m => m.IdStudent == stud.IdStudent || m.IdStudent == 1).Load();
+                _messages.ItemsSource = db.Messages.Local;
+            }
+            catch (System.Data.Entity.Core.EntityCommandExecutionException) { MessageBox.Show("Потеряно соединение с интеренетом!"); }
         }
 
 
         #endregion
 
         #region Tasks
+        private void DeleteProgress(Progress p)
+        {
+            try
+            {
+                using (OrgContext oc = new OrgContext())
+                {
+                    oc.Progresses.Remove(oc.Progresses.Find(new object[] { p.TaskId }));
+                    oc.SaveChanges();
+                }
+            }
+            catch (System.Data.Entity.Core.EntityException) { MessageBox.Show("Проверьте подключение к интернету"); }
+        }
+
+        private bool IsYesMessageBoxResult()
+        {
+            if (MessageBox.Show("Вы уверены?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                return true;
+            else return false;
+        }
+
+        private void RibbonButton_Click(object sender, RoutedEventArgs e)
+        {
+            Progress p = _progressList.SelectedItem as Progress;
+            if (IsYesMessageBoxResult())
+            {
+                DeleteProgress(p);
+                UpdateTasks();
+            }
+        }
 
         private void _lessonsBox_Loaded(object sender, RoutedEventArgs e)
         {
@@ -401,16 +455,23 @@ namespace Organizer
         private void _addProgress_Click(object sender, RoutedEventArgs e)
         {
             ClearNotification();
-            if (_lessonsBox.SelectedIndex != 0 && !IsProgressInProgressList(_lessonsBox.SelectedItem as string))
+            try
             {
-                Progress prog = new Progress { CompletedTasks = 0, IdStudent = stud.IdStudent, LessonName = _lessonsBox.SelectedValue.ToString(), NeededTasks = 1, TaskProgress = 0 };
-                using (OrgContext pr = new OrgContext())
+                if (_lessonsBox.SelectedIndex != 0 && !IsProgressInProgressList(_lessonsBox.SelectedItem as string))
                 {
-                    pr.Progresses.Add(prog);
-                    pr.SaveChanges();
-                    pr.Progresses.Where(p => p.IdStudent == stud.IdStudent).OrderBy(p => p.LessonName).Load();
-                    _progressList.ItemsSource = pr.Progresses.Local;
+                    Progress prog = new Progress { CompletedTasks = 0, IdStudent = stud.IdStudent, LessonName = _lessonsBox.SelectedValue.ToString(), NeededTasks = 1, TaskProgress = 0 };
+                    using (OrgContext pr = new OrgContext())
+                    {
+                        pr.Progresses.Add(prog);
+                        pr.SaveChanges();
+                        pr.Progresses.Where(p => p.IdStudent == stud.IdStudent).OrderBy(p => p.LessonName).Load();
+                        _progressList.ItemsSource = pr.Progresses.Local;
+                    }
                 }
+            }
+            catch (System.Data.Entity.Core.EntityException)
+            {
+                MessageBox.Show("Проверьте подключение к интернету!");
             }
         }
 
@@ -496,32 +557,6 @@ namespace Organizer
                 _progressList.ItemsSource = oc.Progresses.Local;
             }
         }
-        #endregion
-
-        private void RibbonButton_Click(object sender, RoutedEventArgs e)
-        {
-            Progress p = _progressList.SelectedItem as Progress;
-            if (IsYesMessageBoxResult())
-            {
-                DeleteProgress(p);
-                UpdateTasks();
-            }
-        }
-
-        private void DeleteProgress(Progress p)
-        {
-            using (OrgContext oc = new OrgContext())
-            {
-                oc.Progresses.Remove(oc.Progresses.Find(new object[] { p.TaskId }));
-                oc.SaveChanges();
-            }
-        }
-
-        private bool IsYesMessageBoxResult()
-        {
-            if (MessageBox.Show("Вы уверены?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                return true;
-            else return false;
-        }
+        #endregion        
     }
 }

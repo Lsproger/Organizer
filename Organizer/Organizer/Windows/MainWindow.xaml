@@ -9,7 +9,7 @@
         x:Class="Organizer.MainWindow"
         xmlns:databinding="clr-namespace:Organizer"    
         mc:Ignorable="d"
-        Title="MainWindow" Height="597" Width="934" MinWidth="556" MinHeight="450" Background="{x:Null}" Foreground="Black" BorderBrush="Black">
+        Title="Organizer" Height="597" Width="934" MinWidth="934" MinHeight="597" MaxHeight="597" MaxWidth="934" Background="{x:Null}" Foreground="Black" BorderBrush="Black" Icon="/Organizer;component/Resources/icon.ico" ResizeMode="CanMinimize" >
 
 
     <Window.Resources>
@@ -40,12 +40,12 @@
                     <ListBox Name="_progressList" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxNews}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Width="700">
+                                <Grid Width="750">
                                     <DockPanel LastChildFill="True"  Margin="5,0" >
                                         <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Всего заданий"/>
-                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding NeededTasks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <Label Width="30" VerticalContentAlignment="Center" Content="{Binding NeededTasks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 <StackPanel>
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksPlus_Click" Height="15" Label="+" Background="#FFA4A5A6"/>
                                                     <Custom:RibbonButton Width="15" Click="NeededTasksMinus_Click" Height="15" Label="-" Background="#FFA4A5A6"/>
@@ -54,7 +54,7 @@
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Width="100" Content="Сдано заданий"/>
-                                                <Label Width="20" VerticalContentAlignment="Center" Content="{Binding CompletedTasks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <Label Width="30" VerticalContentAlignment="Center" Content="{Binding CompletedTasks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 <StackPanel Orientation="Vertical">
                                                     <Custom:RibbonButton Width="15" Click="CompletedTasksPlus_Click" Height="15" Background="#FFA4A5A6" Label="+"/>
                                                     <Custom:RibbonButton Width="15" Click="CompletedTasksMinus_Click" Height="15" Background="#FFA4A5A6" Label="-"/>
